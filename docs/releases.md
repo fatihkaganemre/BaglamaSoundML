@@ -1,45 +1,10 @@
-# SPM versions and GitHub releases
+# Using published package versions
 
-Swift Package Manager resolves semantic-version **Git tags**; a GitHub release is the human-facing description of a tag. This repository uses stable tags of the form `vMAJOR.MINOR.PATCH`, such as `v0.1.0`. Prerelease suffixes are not configured yet.
+Official versions are published by the repository owner. Using the package does not require repository write access, release permissions, or a GitHub personal access token.
 
-## What CI checks
+In Xcode, add `https://github.com/fatihkaganemre/BaglamaSoundML.git`, select the **BaglamaSoundML** product, and choose a published version from the repository's [Releases](https://github.com/fatihkaganemre/BaglamaSoundML/releases). Until a version exists, the default branch can be used for experimentation.
 
-CI runs for pull requests and pushes to `main`, and can be dispatched manually. It tests the Swift runtime on macOS, builds release products and the iOS simulator runtime, tests Python 3.9 on Ubuntu 22.04 and 3.12 on Ubuntu 24.04 (including CPU training integration on 3.12), and runs the browser controller/worklet tests on Node 22. No personal recordings, pretrained weights or secrets are required.
-
-Release tags reuse the same checks. Only the final publishing job has `contents: write`; other jobs have read-only repository permissions. Official actions are pinned to immutable commits. The workflow uses GitHub's ephemeral token rather than a personal access token.
-
-Run `make release-help` for a quick reminder. It prints instructions and never creates a tag.
-
-## Release a version
-
-1. Update `[project].version` in `pyproject.toml` to the version being released, such as `0.1.0`. SPM reads the Git tag; this check keeps source-package metadata aligned.
-2. Update API documentation/release notes and merge or push the intended commit to `main` through your normal review process.
-3. Wait for **CI** to pass for that exact commit. Start from a clean, up-to-date checkout:
-
-   ```sh
-   git switch main
-   git pull --ff-only origin main
-   git status --short
-   ```
-
-4. Create and push **only the intended version tag** (replace the example for later releases):
-
-   ```sh
-   git tag -a v0.1.0 -m "Release v0.1.0"
-   git push origin v0.1.0
-   ```
-
-5. Watch **Release** in GitHub Actions. It validates the tag against `pyproject.toml`, requires the tagged commit to belong to `main`, reruns CI, and creates a source release with generated notes. Rerunning an already published tag leaves its release unchanged.
-
-**Important:** pushing a valid Git tag makes it discoverable to SPM immediately, even before the GitHub release workflow finishes. CI gates the GitHub release, not visibility of the tag itself. Check CI before tagging. Never move/reuse a published version tag; release a new version for fixes.
-
-The workflow does not upload local build directories, model files, sample packs, databases, or reports. GitHub's automatic source archives contain the tracked repository files. Keeping artifacts Git-ignored remains essential.
-
-No first release/tag is created just by installing these workflows. The first version can be published when the maintainer explicitly tags it.
-
-## Consume a version
-
-In Xcode, add the repository URL and choose an appropriate version requirement. In another Swift package, after the example version exists:
+After an example version `0.1.0` has actually been published, another Swift package can declare:
 
 ```swift
 .package(
@@ -48,10 +13,8 @@ In Xcode, add the repository URL and choose an appropriate version requirement. 
 )
 ```
 
-Then depend on `.product(name: "BaglamaSoundML", package: "BaglamaSoundML")`. Inspect the README at the chosen tag: a release does not make unfinished APIs available. Model artifacts are supplied separately by the consuming app.
+Add `.product(name: "BaglamaSoundML", package: "BaglamaSoundML")` to your target dependencies. Inspect the README at the chosen version for available APIs and supported platforms. An exact version requirement can be used when reproducibility is needed.
 
-## References
+Releases contain source code, not private recordings, trained weights, feedback databases, or generated audio. The app supplies its own portable model for synthesis. Python research tools do not ship inside the Swift runtime, and a release does not make unfinished Swift APIs available.
 
-- [SwiftPM versioned dependencies](https://docs.swift.org/package-manager/PackageDescription/PackageDescription.html)
-- [GitHub's Swift CI guide](https://docs.github.com/en/actions/tutorials/build-and-test-code/swift)
-- [GitHub CLI release creation and tag verification](https://cli.github.com/manual/gh_release_create)
+Public users may clone/fork the project and propose changes through pull requests; this does not grant write access to this repository or permission to publish its official releases.

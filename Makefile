@@ -6,7 +6,7 @@ FEEDBACK ?= 1
 PYTHON := .venv/bin/python3
 export PYTHONDONTWRITEBYTECODE := 1
 
-.PHONY: help start stop restart train compare test evaluate-final-tone release-help
+.PHONY: help start stop restart train compare test evaluate-final-tone
 help:
 	@echo 'BaglamaSoundML commands:'
 	@echo '  make help     Show this list (also the default for make)'
@@ -16,7 +16,6 @@ help:
 	@echo '  make train    Export library, prepare dataset, train, and compare'
 	@echo '  make compare  Open the latest listening comparison'
 	@echo '  make evaluate-final-tone  Evaluate saved strum labels (never trains)'
-	@echo '  make release-help  Show SPM release steps (does not create a tag)'
 	@echo '  make test     Run Python regression tests'
 	@echo 'Options: PORT=8766; training: STEPS=1200 SEED=7 FEEDBACK=0 (real-only control)'
 	@echo 'Workflow and setup: COMMANDS.md'
@@ -35,10 +34,3 @@ test:
 
 evaluate-final-tone:
 	@$(PYTHON) scripts/evaluate-final-tone.py
-
-release-help:
-	@echo '1. Update pyproject.toml version and push the intended commit to main.'
-	@echo '2. Wait for CI to pass on that exact commit.'
-	@echo '3. git tag -a vX.Y.Z -m "Release vX.Y.Z"'
-	@echo '4. git push origin vX.Y.Z'
-	@echo 'Replace X.Y.Z with the project version. Details: docs/releases.md'
