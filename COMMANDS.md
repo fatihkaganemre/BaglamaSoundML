@@ -58,3 +58,7 @@ Advanced help:
 ## Local data
 
 Back up `data/library/` while the server is stopped, including the final-tone test-case subdirectory. Library Trash is recoverable. Synthesis exports and strum evaluation exports are separate. Recordings, feedback, trained weights and generated outputs are Git-ignored and are not part of the public checkout or Swift package.
+
+## Publishing an SPM version
+
+See [docs/releases.md](docs/releases.md). Update the project version, wait for CI on main, then push an explicit `vMAJOR.MINOR.PATCH` tag. Release CI validates and tests the tagged commit before creating the GitHub release. SPM can see a pushed tag immediately, so check CI before tagging.

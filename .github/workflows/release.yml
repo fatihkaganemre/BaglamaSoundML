@@ -1,0 +1,65 @@
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  validate:
+    name: Validate version tag
+    if: github.event.deleted != true
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+        with:
+          python-version: '3.12'
+      - name: Verify tag format and package version
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: python scripts/check_release.py --tag "$RELEASE_TAG"
+      - name: Require a commit from main
+        run: git merge-base --is-ancestor "$GITHUB_SHA" origin/main
+
+  checks:
+    name: Release checks
+    needs: validate
+    uses: ./.github/workflows/ci.yml
+    permissions:
+      contents: read
+
+  publish:
+    name: Publish source release
+    needs: [validate, checks]
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - name: Create GitHub release for the existing tag
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: |
+          if gh release view "$RELEASE_TAG" >/dev/null 2>&1; then
+            echo "Release already exists; leaving it unchanged."
+          else
+            gh release create "$RELEASE_TAG" --verify-tag \
+              --title "$RELEASE_TAG" --generate-notes \
+              --notes "$(cat .github/release-notes.md)"
+          fi

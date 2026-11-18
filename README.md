@@ -99,6 +99,10 @@ write_wav(Path("outputs/D3.wav"), audio)
 
 This returns mono PCM at 48 kHz. Pitch is supplied explicitly; the small model predicts harmonic/noise envelopes and DSP synthesizes the waveform. It does not retrieve an original recording. The separate nearest-sample baseline does require source recordings.
 
+## Releases and version tags
+
+CI checks pushes and pull requests. Tags such as `v0.1.0` trigger a validated, tested GitHub source release for SPM consumers. No recordings or model weights are attached. See [the release guide](docs/releases.md) for versioning, tagging, and Xcode/Package.swift consumption. A version is available only after its tag exists; adding CI does not create the first release automatically.
+
 ## Use with Swift Package Manager
 
 The current package requires **Swift 6**, supports **iOS 16+ / macOS 13+**, and has no third-party runtime dependencies.
