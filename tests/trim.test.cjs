@@ -1,0 +1,37 @@
+const {test}=require('node:test');
+const assert=require('node:assert/strict');
+const fs=require('node:fs');
+const path=require('node:path');
+const root=process.env.TRIM_RESOURCES || path.join(__dirname,'../src/baglama_sound_ml/resources');
+const url=s=>'data:text/javascript;base64,'+Buffer.from(s).toString('base64');
+const audioURL=url(fs.readFileSync(path.join(root,'lab-audio.js'),'utf8'));
+const captureURL=url(fs.readFileSync(path.join(root,'capture-ui.js'),'utf8').replace("'/lab-audio.js'",JSON.stringify(audioURL)));
+test('trimming uses exact frames, rejects invalid bounds, and preserves the original',async()=>{
+ const {trimmedTake,trimBounds}=await import(audioURL);
+ const original=Float32Array.from({length:48001},(_,i)=>i/48001);
+ const cut=trimmedTake(original,48000,9600,28800);
+ assert.equal(cut.duration,.4); assert.deepEqual(cut.samples,original.slice(9600,28800));
+ cut.samples[0]=99; assert.notEqual(original[9600],99);
+ assert.equal(trimmedTake(original,48000,0,48001).samples.length,48001);
+ for(const [a,b] of [[-1,20000],[0,48002],[100,100],[NaN,20000],[20000,100]])assert.throws(()=>trimBounds(48001,48000,a,b));
+ assert.equal(trimBounds(44100,44100,0,8820).duration,.2);
+ assert.throws(()=>trimBounds(44100,44100,0,8819));
+});
+test('review saves selected PCM, retains failed drafts, and resets to the complete take',async()=>{
+ const elements=new Map();
+ const context=new Proxy({}, {get:(o,k)=>o[k]||(()=>{})});
+ global.document={addEventListener(){},getElementById(id){if(!elements.has(id))elements.set(id,{value:'',checked:false,disabled:false,hidden:true,width:800,height:150,addEventListener(){},setAttribute(){},classList:{toggle(){}},getContext(){return context;}});return elements.get(id);}};
+ global.window={addEventListener(){}};
+ const {SampleEditor}=await import(captureURL);
+ let payload,fail=true;
+ const ui=new SampleEditor({audio:{stop(){}},api:async(_,body)=>{payload=body;if(fail)throw Error('offline');return {};},label(){},notify(){},saved:async()=>{}});
+ const original=Float32Array.from({length:48001},(_,i)=>Math.sin(i*.1));
+ ui.take={samples:original,rate:48000,setup:{label:'test',session:'test',strength:'medium'},source:'microphone',filename:''};
+ ui.setTrim(9600,28800);document.getElementById('realAttestation').checked=true;
+ await ui.save();
+ assert.equal(ui.take.samples,original);assert.equal(ui.trim.startFrame,9600);assert.equal(document.getElementById('reviewControls').disabled,false);
+ assert.deepEqual(payload,{startFrame:9600,endFrame:28800});
+ ui.resetTrim();assert.equal(ui.selection().samples.length,48001);
+ ui.setTrim(0,10);assert.throws(()=>ui.selection());assert.equal(document.getElementById('saveTake').disabled,true);
+ ui.setTrim(9600,28800);fail=false;await ui.save();assert.equal(ui.take.samples,original);
+});

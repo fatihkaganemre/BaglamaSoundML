@@ -1,0 +1,2835 @@
+{
+  "schemaVersion": 1,
+  "instruments": [
+    {
+      "id": "kisaSap",
+      "nameKey": "instrument.kisaSap",
+      "tunings": [
+        {
+          "id": "bozuk",
+          "nameKey": "tuning.bozuk",
+          "variants": [
+            {
+              "id": "karar-A",
+              "kararPitchClass": 9,
+              "courses": [
+                {
+                  "id": "1",
+                  "strings": [
+                    {
+                      "id": "kisaSap.bozuk.1.1",
+                      "note": 9
+                    }
+                  ]
+                },
+                {
+                  "id": "2",
+                  "strings": [
+                    {
+                      "id": "kisaSap.bozuk.2.1",
+                      "note": 2
+                    }
+                  ]
+                },
+                {
+                  "id": "3",
+                  "strings": [
+                    {
+                      "id": "kisaSap.bozuk.3.1",
+                      "note": 4
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "karar-A-sharp",
+              "kararPitchClass": 10,
+              "courses": [
+                {
+                  "id": "1",
+                  "strings": [
+                    {
+                      "id": "kisaSap.bozuk.1.1",
+                      "note": 10
+                    }
+                  ]
+                },
+                {
+                  "id": "2",
+                  "strings": [
+                    {
+                      "id": "kisaSap.bozuk.2.1",
+                      "note": 3
+                    }
+                  ]
+                },
+                {
+                  "id": "3",
+                  "strings": [
+                    {
+                      "id": "kisaSap.bozuk.3.1",
+                      "note": 5
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "karar-B",
+              "kararPitchClass": 11,
+              "courses": [
+                {
+                  "id": "1",
+                  "strings": [
+                    {
+                      "id": "kisaSap.bozuk.1.1",
+                      "note": 11
+                    }
+                  ]
+                },
+                {
+                  "id": "2",
+                  "strings": [
+                    {
+                      "id": "kisaSap.bozuk.2.1",
+                      "note": 4
+                    }
+                  ]
+                },
+                {
+                  "id": "3",
+                  "strings": [
+                    {
+                      "id": "kisaSap.bozuk.3.1",
+                      "note": 6
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "karar-C",
+              "kararPitchClass": 0,
+              "courses": [
+                {
+                  "id": "1",
+                  "strings": [
+                    {
+                      "id": "kisaSap.bozuk.1.1",
+                      "note": 0
+                    }
+                  ]
+                },
+                {
+                  "id": "2",
+                  "strings": [
+                    {
+                      "id": "kisaSap.bozuk.2.1",
+                      "note": 5
+                    }
+                  ]
+                },
+                {
+                  "id": "3",
+                  "strings": [
+                    {
+                      "id": "kisaSap.bozuk.3.1",
+                      "note": 7
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "karar-C-sharp",
+              "kararPitchClass": 1,
+              "courses": [
+                {
+                  "id": "1",
+                  "strings": [
+                    {
+                      "id": "kisaSap.bozuk.1.1",
+                      "note": 1
+                    }
+                  ]
+                },
+                {
+                  "id": "2",
+                  "strings": [
+                    {
+                      "id": "kisaSap.bozuk.2.1",
+                      "note": 6
+                    }
+                  ]
+                },
+                {
+                  "id": "3",
+                  "strings": [
+                    {
+                      "id": "kisaSap.bozuk.3.1",
+                      "note": 8
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "karar-D",
+              "kararPitchClass": 2,
+              "courses": [
+                {
+                  "id": "1",
+                  "strings": [
+                    {
+                      "id": "kisaSap.bozuk.1.1",
+                      "note": 2
+                    }
+                  ]
+                },
+                {
+                  "id": "2",
+                  "strings": [
+                    {
+                      "id": "kisaSap.bozuk.2.1",
+                      "note": 7
+                    }
+                  ]
+                },
+                {
+                  "id": "3",
+                  "strings": [
+                    {
+                      "id": "kisaSap.bozuk.3.1",
+                      "note": 9
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "karar-D-sharp",
+              "kararPitchClass": 3,
+              "courses": [
+                {
+                  "id": "1",
+                  "strings": [
+                    {
+                      "id": "kisaSap.bozuk.1.1",
+                      "note": 3
+                    }
+                  ]
+                },
+                {
+                  "id": "2",
+                  "strings": [
+                    {
+                      "id": "kisaSap.bozuk.2.1",
+                      "note": 8
+                    }
+                  ]
+                },
+                {
+                  "id": "3",
+                  "strings": [
+                    {
+                      "id": "kisaSap.bozuk.3.1",
+                      "note": 10
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "karar-E",
+              "kararPitchClass": 4,
+              "courses": [
+                {
+                  "id": "1",
+                  "strings": [
+                    {
+                      "id": "kisaSap.bozuk.1.1",
+                      "note": 4
+                    }
+                  ]
+                },
+                {
+                  "id": "2",
+                  "strings": [
+                    {
+                      "id": "kisaSap.bozuk.2.1",
+                      "note": 9
+                    }
+                  ]
+                },
+                {
+                  "id": "3",
+                  "strings": [
+                    {
+                      "id": "kisaSap.bozuk.3.1",
+                      "note": 11
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "karar-F",
+              "kararPitchClass": 5,
+              "courses": [
+                {
+                  "id": "1",
+                  "strings": [
+                    {
+                      "id": "kisaSap.bozuk.1.1",
+                      "note": 5
+                    }
+                  ]
+                },
+                {
+                  "id": "2",
+                  "strings": [
+                    {
+                      "id": "kisaSap.bozuk.2.1",
+                      "note": 10
+                    }
+                  ]
+                },
+                {
+                  "id": "3",
+                  "strings": [
+                    {
+                      "id": "kisaSap.bozuk.3.1",
+                      "note": 0
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "karar-F-sharp",
+              "kararPitchClass": 6,
+              "courses": [
+                {
+                  "id": "1",
+                  "strings": [
+                    {
+                      "id": "kisaSap.bozuk.1.1",
+                      "note": 6
+                    }
+                  ]
+                },
+                {
+                  "id": "2",
+                  "strings": [
+                    {
+                      "id": "kisaSap.bozuk.2.1",
+                      "note": 11
+                    }
+                  ]
+                },
+                {
+                  "id": "3",
+                  "strings": [
+                    {
+                      "id": "kisaSap.bozuk.3.1",
+                      "note": 1
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "karar-G",
+              "kararPitchClass": 7,
+              "courses": [
+                {
+                  "id": "1",
+                  "strings": [
+                    {
+                      "id": "kisaSap.bozuk.1.1",
+                      "note": 7
+                    }
+                  ]
+                },
+                {
+                  "id": "2",
+                  "strings": [
+                    {
+                      "id": "kisaSap.bozuk.2.1",
+                      "note": 0
+                    }
+                  ]
+                },
+                {
+                  "id": "3",
+                  "strings": [
+                    {
+                      "id": "kisaSap.bozuk.3.1",
+                      "note": 2
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "karar-G-sharp",
+              "kararPitchClass": 8,
+              "courses": [
+                {
+                  "id": "1",
+                  "strings": [
+                    {
+                      "id": "kisaSap.bozuk.1.1",
+                      "note": 8
+                    }
+                  ]
+                },
+                {
+                  "id": "2",
+                  "strings": [
+                    {
+                      "id": "kisaSap.bozuk.2.1",
+                      "note": 1
+                    }
+                  ]
+                },
+                {
+                  "id": "3",
+                  "strings": [
+                    {
+                      "id": "kisaSap.bozuk.3.1",
+                      "note": 3
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "title": "Bozuk (Kara D\u00fczen)"
+        },
+        {
+          "id": "baglama",
+          "nameKey": "tuning.baglama",
+          "variants": [
+            {
+              "id": "karar-G",
+              "kararPitchClass": 7,
+              "courses": [
+                {
+                  "id": "ust",
+                  "strings": [
+                    {
+                      "id": "kisaSap.baglama.ust.1",
+                      "note": 7
+                    },
+                    {
+                      "id": "kisaSap.baglama.ust.2",
+                      "note": 7
+                    }
+                  ]
+                },
+                {
+                  "id": "orta",
+                  "strings": [
+                    {
+                      "id": "kisaSap.baglama.orta.1",
+                      "note": 5
+                    },
+                    {
+                      "id": "kisaSap.baglama.orta.2",
+                      "note": 5
+                    }
+                  ]
+                },
+                {
+                  "id": "alt",
+                  "strings": [
+                    {
+                      "id": "kisaSap.baglama.alt.1",
+                      "note": 0
+                    },
+                    {
+                      "id": "kisaSap.baglama.alt.2",
+                      "note": 0
+                    },
+                    {
+                      "id": "kisaSap.baglama.alt.3",
+                      "note": 0
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "karar-G-sharp",
+              "kararPitchClass": 8,
+              "courses": [
+                {
+                  "id": "ust",
+                  "strings": [
+                    {
+                      "id": "kisaSap.baglama.ust.1",
+                      "note": 8
+                    },
+                    {
+                      "id": "kisaSap.baglama.ust.2",
+                      "note": 8
+                    }
+                  ]
+                },
+                {
+                  "id": "orta",
+                  "strings": [
+                    {
+                      "id": "kisaSap.baglama.orta.1",
+                      "note": 6
+                    },
+                    {
+                      "id": "kisaSap.baglama.orta.2",
+                      "note": 6
+                    }
+                  ]
+                },
+                {
+                  "id": "alt",
+                  "strings": [
+                    {
+                      "id": "kisaSap.baglama.alt.1",
+                      "note": 1
+                    },
+                    {
+                      "id": "kisaSap.baglama.alt.2",
+                      "note": 1
+                    },
+                    {
+                      "id": "kisaSap.baglama.alt.3",
+                      "note": 1
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "karar-A",
+              "kararPitchClass": 9,
+              "courses": [
+                {
+                  "id": "ust",
+                  "strings": [
+                    {
+                      "id": "kisaSap.baglama.ust.1",
+                      "note": 9,
+                      "octave": 2
+                    },
+                    {
+                      "id": "kisaSap.baglama.ust.2",
+                      "note": 9,
+                      "octave": 3
+                    }
+                  ]
+                },
+                {
+                  "id": "orta",
+                  "strings": [
+                    {
+                      "id": "kisaSap.baglama.orta.1",
+                      "note": 7,
+                      "octave": 3
+                    },
+                    {
+                      "id": "kisaSap.baglama.orta.2",
+                      "note": 7,
+                      "octave": 3
+                    }
+                  ]
+                },
+                {
+                  "id": "alt",
+                  "strings": [
+                    {
+                      "id": "kisaSap.baglama.alt.1",
+                      "note": 2,
+                      "octave": 3
+                    },
+                    {
+                      "id": "kisaSap.baglama.alt.2",
+                      "note": 2,
+                      "octave": 4
+                    },
+                    {
+                      "id": "kisaSap.baglama.alt.3",
+                      "note": 2,
+                      "octave": 4
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "karar-A-sharp",
+              "kararPitchClass": 10,
+              "courses": [
+                {
+                  "id": "ust",
+                  "strings": [
+                    {
+                      "id": "kisaSap.baglama.ust.1",
+                      "note": 10
+                    },
+                    {
+                      "id": "kisaSap.baglama.ust.2",
+                      "note": 10
+                    }
+                  ]
+                },
+                {
+                  "id": "orta",
+                  "strings": [
+                    {
+                      "id": "kisaSap.baglama.orta.1",
+                      "note": 8
+                    },
+                    {
+                      "id": "kisaSap.baglama.orta.2",
+                      "note": 8
+                    }
+                  ]
+                },
+                {
+                  "id": "alt",
+                  "strings": [
+                    {
+                      "id": "kisaSap.baglama.alt.1",
+                      "note": 3
+                    },
+                    {
+                      "id": "kisaSap.baglama.alt.2",
+                      "note": 3
+                    },
+                    {
+                      "id": "kisaSap.baglama.alt.3",
+                      "note": 3
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "karar-B",
+              "kararPitchClass": 11,
+              "courses": [
+                {
+                  "id": "ust",
+                  "strings": [
+                    {
+                      "id": "kisaSap.baglama.ust.1",
+                      "note": 11
+                    },
+                    {
+                      "id": "kisaSap.baglama.ust.2",
+                      "note": 11
+                    }
+                  ]
+                },
+                {
+                  "id": "orta",
+                  "strings": [
+                    {
+                      "id": "kisaSap.baglama.orta.1",
+                      "note": 9
+                    },
+                    {
+                      "id": "kisaSap.baglama.orta.2",
+                      "note": 9
+                    }
+                  ]
+                },
+                {
+                  "id": "alt",
+                  "strings": [
+                    {
+                      "id": "kisaSap.baglama.alt.1",
+                      "note": 4
+                    },
+                    {
+                      "id": "kisaSap.baglama.alt.2",
+                      "note": 4
+                    },
+                    {
+                      "id": "kisaSap.baglama.alt.3",
+                      "note": 4
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "karar-C",
+              "kararPitchClass": 0,
+              "courses": [
+                {
+                  "id": "ust",
+                  "strings": [
+                    {
+                      "id": "kisaSap.baglama.ust.1",
+                      "note": 0
+                    },
+                    {
+                      "id": "kisaSap.baglama.ust.2",
+                      "note": 0
+                    }
+                  ]
+                },
+                {
+                  "id": "orta",
+                  "strings": [
+                    {
+                      "id": "kisaSap.baglama.orta.1",
+                      "note": 10
+                    },
+                    {
+                      "id": "kisaSap.baglama.orta.2",
+                      "note": 10
+                    }
+                  ]
+                },
+                {
+                  "id": "alt",
+                  "strings": [
+                    {
+                      "id": "kisaSap.baglama.alt.1",
+                      "note": 5
+                    },
+                    {
+                      "id": "kisaSap.baglama.alt.2",
+                      "note": 5
+                    },
+                    {
+                      "id": "kisaSap.baglama.alt.3",
+                      "note": 5
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "karar-C-sharp",
+              "kararPitchClass": 1,
+              "courses": [
+                {
+                  "id": "ust",
+                  "strings": [
+                    {
+                      "id": "kisaSap.baglama.ust.1",
+                      "note": 1
+                    },
+                    {
+                      "id": "kisaSap.baglama.ust.2",
+                      "note": 1
+                    }
+                  ]
+                },
+                {
+                  "id": "orta",
+                  "strings": [
+                    {
+                      "id": "kisaSap.baglama.orta.1",
+                      "note": 11
+                    },
+                    {
+                      "id": "kisaSap.baglama.orta.2",
+                      "note": 11
+                    }
+                  ]
+                },
+                {
+                  "id": "alt",
+                  "strings": [
+                    {
+                      "id": "kisaSap.baglama.alt.1",
+                      "note": 6
+                    },
+                    {
+                      "id": "kisaSap.baglama.alt.2",
+                      "note": 6
+                    },
+                    {
+                      "id": "kisaSap.baglama.alt.3",
+                      "note": 6
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "karar-D",
+              "kararPitchClass": 2,
+              "courses": [
+                {
+                  "id": "ust",
+                  "strings": [
+                    {
+                      "id": "kisaSap.baglama.ust.1",
+                      "note": 2
+                    },
+                    {
+                      "id": "kisaSap.baglama.ust.2",
+                      "note": 2
+                    }
+                  ]
+                },
+                {
+                  "id": "orta",
+                  "strings": [
+                    {
+                      "id": "kisaSap.baglama.orta.1",
+                      "note": 0
+                    },
+                    {
+                      "id": "kisaSap.baglama.orta.2",
+                      "note": 0
+                    }
+                  ]
+                },
+                {
+                  "id": "alt",
+                  "strings": [
+                    {
+                      "id": "kisaSap.baglama.alt.1",
+                      "note": 7
+                    },
+                    {
+                      "id": "kisaSap.baglama.alt.2",
+                      "note": 7
+                    },
+                    {
+                      "id": "kisaSap.baglama.alt.3",
+                      "note": 7
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "karar-D-sharp",
+              "kararPitchClass": 3,
+              "courses": [
+                {
+                  "id": "ust",
+                  "strings": [
+                    {
+                      "id": "kisaSap.baglama.ust.1",
+                      "note": 3
+                    },
+                    {
+                      "id": "kisaSap.baglama.ust.2",
+                      "note": 3
+                    }
+                  ]
+                },
+                {
+                  "id": "orta",
+                  "strings": [
+                    {
+                      "id": "kisaSap.baglama.orta.1",
+                      "note": 1
+                    },
+                    {
+                      "id": "kisaSap.baglama.orta.2",
+                      "note": 1
+                    }
+                  ]
+                },
+                {
+                  "id": "alt",
+                  "strings": [
+                    {
+                      "id": "kisaSap.baglama.alt.1",
+                      "note": 8
+                    },
+                    {
+                      "id": "kisaSap.baglama.alt.2",
+                      "note": 8
+                    },
+                    {
+                      "id": "kisaSap.baglama.alt.3",
+                      "note": 8
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "karar-E",
+              "kararPitchClass": 4,
+              "courses": [
+                {
+                  "id": "ust",
+                  "strings": [
+                    {
+                      "id": "kisaSap.baglama.ust.1",
+                      "note": 4
+                    },
+                    {
+                      "id": "kisaSap.baglama.ust.2",
+                      "note": 4
+                    }
+                  ]
+                },
+                {
+                  "id": "orta",
+                  "strings": [
+                    {
+                      "id": "kisaSap.baglama.orta.1",
+                      "note": 2
+                    },
+                    {
+                      "id": "kisaSap.baglama.orta.2",
+                      "note": 2
+                    }
+                  ]
+                },
+                {
+                  "id": "alt",
+                  "strings": [
+                    {
+                      "id": "kisaSap.baglama.alt.1",
+                      "note": 9
+                    },
+                    {
+                      "id": "kisaSap.baglama.alt.2",
+                      "note": 9
+                    },
+                    {
+                      "id": "kisaSap.baglama.alt.3",
+                      "note": 9
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "karar-F",
+              "kararPitchClass": 5,
+              "courses": [
+                {
+                  "id": "ust",
+                  "strings": [
+                    {
+                      "id": "kisaSap.baglama.ust.1",
+                      "note": 5
+                    },
+                    {
+                      "id": "kisaSap.baglama.ust.2",
+                      "note": 5
+                    }
+                  ]
+                },
+                {
+                  "id": "orta",
+                  "strings": [
+                    {
+                      "id": "kisaSap.baglama.orta.1",
+                      "note": 3
+                    },
+                    {
+                      "id": "kisaSap.baglama.orta.2",
+                      "note": 3
+                    }
+                  ]
+                },
+                {
+                  "id": "alt",
+                  "strings": [
+                    {
+                      "id": "kisaSap.baglama.alt.1",
+                      "note": 10
+                    },
+                    {
+                      "id": "kisaSap.baglama.alt.2",
+                      "note": 10
+                    },
+                    {
+                      "id": "kisaSap.baglama.alt.3",
+                      "note": 10
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "karar-F-sharp",
+              "kararPitchClass": 6,
+              "courses": [
+                {
+                  "id": "ust",
+                  "strings": [
+                    {
+                      "id": "kisaSap.baglama.ust.1",
+                      "note": 6
+                    },
+                    {
+                      "id": "kisaSap.baglama.ust.2",
+                      "note": 6
+                    }
+                  ]
+                },
+                {
+                  "id": "orta",
+                  "strings": [
+                    {
+                      "id": "kisaSap.baglama.orta.1",
+                      "note": 4
+                    },
+                    {
+                      "id": "kisaSap.baglama.orta.2",
+                      "note": 4
+                    }
+                  ]
+                },
+                {
+                  "id": "alt",
+                  "strings": [
+                    {
+                      "id": "kisaSap.baglama.alt.1",
+                      "note": 11
+                    },
+                    {
+                      "id": "kisaSap.baglama.alt.2",
+                      "note": 11
+                    },
+                    {
+                      "id": "kisaSap.baglama.alt.3",
+                      "note": 11
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "title": "Ba\u011flama D\u00fczeni"
+        }
+      ],
+      "title": "K\u0131sa Sap"
+    },
+    {
+      "id": "uzunSap",
+      "nameKey": "instrument.uzunSap",
+      "tunings": [
+        {
+          "id": "bozuk",
+          "nameKey": "tuning.bozuk",
+          "variants": [
+            {
+              "id": "karar-A",
+              "kararPitchClass": 9,
+              "courses": [
+                {
+                  "id": "1",
+                  "strings": [
+                    {
+                      "id": "uzunSap.bozuk.1.1",
+                      "note": 9
+                    }
+                  ]
+                },
+                {
+                  "id": "2",
+                  "strings": [
+                    {
+                      "id": "uzunSap.bozuk.2.1",
+                      "note": 2
+                    }
+                  ]
+                },
+                {
+                  "id": "3",
+                  "strings": [
+                    {
+                      "id": "uzunSap.bozuk.3.1",
+                      "note": 4
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "karar-A-sharp",
+              "kararPitchClass": 10,
+              "courses": [
+                {
+                  "id": "1",
+                  "strings": [
+                    {
+                      "id": "uzunSap.bozuk.1.1",
+                      "note": 10
+                    }
+                  ]
+                },
+                {
+                  "id": "2",
+                  "strings": [
+                    {
+                      "id": "uzunSap.bozuk.2.1",
+                      "note": 3
+                    }
+                  ]
+                },
+                {
+                  "id": "3",
+                  "strings": [
+                    {
+                      "id": "uzunSap.bozuk.3.1",
+                      "note": 5
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "karar-B",
+              "kararPitchClass": 11,
+              "courses": [
+                {
+                  "id": "1",
+                  "strings": [
+                    {
+                      "id": "uzunSap.bozuk.1.1",
+                      "note": 11
+                    }
+                  ]
+                },
+                {
+                  "id": "2",
+                  "strings": [
+                    {
+                      "id": "uzunSap.bozuk.2.1",
+                      "note": 4
+                    }
+                  ]
+                },
+                {
+                  "id": "3",
+                  "strings": [
+                    {
+                      "id": "uzunSap.bozuk.3.1",
+                      "note": 6
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "karar-C",
+              "kararPitchClass": 0,
+              "courses": [
+                {
+                  "id": "1",
+                  "strings": [
+                    {
+                      "id": "uzunSap.bozuk.1.1",
+                      "note": 0
+                    }
+                  ]
+                },
+                {
+                  "id": "2",
+                  "strings": [
+                    {
+                      "id": "uzunSap.bozuk.2.1",
+                      "note": 5
+                    }
+                  ]
+                },
+                {
+                  "id": "3",
+                  "strings": [
+                    {
+                      "id": "uzunSap.bozuk.3.1",
+                      "note": 7
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "karar-C-sharp",
+              "kararPitchClass": 1,
+              "courses": [
+                {
+                  "id": "1",
+                  "strings": [
+                    {
+                      "id": "uzunSap.bozuk.1.1",
+                      "note": 1
+                    }
+                  ]
+                },
+                {
+                  "id": "2",
+                  "strings": [
+                    {
+                      "id": "uzunSap.bozuk.2.1",
+                      "note": 6
+                    }
+                  ]
+                },
+                {
+                  "id": "3",
+                  "strings": [
+                    {
+                      "id": "uzunSap.bozuk.3.1",
+                      "note": 8
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "karar-D",
+              "kararPitchClass": 2,
+              "courses": [
+                {
+                  "id": "1",
+                  "strings": [
+                    {
+                      "id": "uzunSap.bozuk.1.1",
+                      "note": 2
+                    }
+                  ]
+                },
+                {
+                  "id": "2",
+                  "strings": [
+                    {
+                      "id": "uzunSap.bozuk.2.1",
+                      "note": 7
+                    }
+                  ]
+                },
+                {
+                  "id": "3",
+                  "strings": [
+                    {
+                      "id": "uzunSap.bozuk.3.1",
+                      "note": 9
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "karar-D-sharp",
+              "kararPitchClass": 3,
+              "courses": [
+                {
+                  "id": "1",
+                  "strings": [
+                    {
+                      "id": "uzunSap.bozuk.1.1",
+                      "note": 3
+                    }
+                  ]
+                },
+                {
+                  "id": "2",
+                  "strings": [
+                    {
+                      "id": "uzunSap.bozuk.2.1",
+                      "note": 8
+                    }
+                  ]
+                },
+                {
+                  "id": "3",
+                  "strings": [
+                    {
+                      "id": "uzunSap.bozuk.3.1",
+                      "note": 10
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "karar-E",
+              "kararPitchClass": 4,
+              "courses": [
+                {
+                  "id": "1",
+                  "strings": [
+                    {
+                      "id": "uzunSap.bozuk.1.1",
+                      "note": 4
+                    }
+                  ]
+                },
+                {
+                  "id": "2",
+                  "strings": [
+                    {
+                      "id": "uzunSap.bozuk.2.1",
+                      "note": 9
+                    }
+                  ]
+                },
+                {
+                  "id": "3",
+                  "strings": [
+                    {
+                      "id": "uzunSap.bozuk.3.1",
+                      "note": 11
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "karar-F",
+              "kararPitchClass": 5,
+              "courses": [
+                {
+                  "id": "1",
+                  "strings": [
+                    {
+                      "id": "uzunSap.bozuk.1.1",
+                      "note": 5
+                    }
+                  ]
+                },
+                {
+                  "id": "2",
+                  "strings": [
+                    {
+                      "id": "uzunSap.bozuk.2.1",
+                      "note": 10
+                    }
+                  ]
+                },
+                {
+                  "id": "3",
+                  "strings": [
+                    {
+                      "id": "uzunSap.bozuk.3.1",
+                      "note": 0
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "karar-F-sharp",
+              "kararPitchClass": 6,
+              "courses": [
+                {
+                  "id": "1",
+                  "strings": [
+                    {
+                      "id": "uzunSap.bozuk.1.1",
+                      "note": 6
+                    }
+                  ]
+                },
+                {
+                  "id": "2",
+                  "strings": [
+                    {
+                      "id": "uzunSap.bozuk.2.1",
+                      "note": 11
+                    }
+                  ]
+                },
+                {
+                  "id": "3",
+                  "strings": [
+                    {
+                      "id": "uzunSap.bozuk.3.1",
+                      "note": 1
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "karar-G",
+              "kararPitchClass": 7,
+              "courses": [
+                {
+                  "id": "1",
+                  "strings": [
+                    {
+                      "id": "uzunSap.bozuk.1.1",
+                      "note": 7
+                    }
+                  ]
+                },
+                {
+                  "id": "2",
+                  "strings": [
+                    {
+                      "id": "uzunSap.bozuk.2.1",
+                      "note": 0
+                    }
+                  ]
+                },
+                {
+                  "id": "3",
+                  "strings": [
+                    {
+                      "id": "uzunSap.bozuk.3.1",
+                      "note": 2
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "karar-G-sharp",
+              "kararPitchClass": 8,
+              "courses": [
+                {
+                  "id": "1",
+                  "strings": [
+                    {
+                      "id": "uzunSap.bozuk.1.1",
+                      "note": 8
+                    }
+                  ]
+                },
+                {
+                  "id": "2",
+                  "strings": [
+                    {
+                      "id": "uzunSap.bozuk.2.1",
+                      "note": 1
+                    }
+                  ]
+                },
+                {
+                  "id": "3",
+                  "strings": [
+                    {
+                      "id": "uzunSap.bozuk.3.1",
+                      "note": 3
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "title": "Bozuk (Kara D\u00fczen)"
+        },
+        {
+          "id": "baglama",
+          "nameKey": "tuning.baglama",
+          "variants": [
+            {
+              "id": "karar-C",
+              "kararPitchClass": 0,
+              "courses": [
+                {
+                  "id": "3",
+                  "strings": [
+                    {
+                      "id": "uzunSap.baglama.3.1",
+                      "note": 7
+                    },
+                    {
+                      "id": "uzunSap.baglama.3.2",
+                      "note": 7
+                    }
+                  ]
+                },
+                {
+                  "id": "2",
+                  "strings": [
+                    {
+                      "id": "uzunSap.baglama.2.1",
+                      "note": 5
+                    },
+                    {
+                      "id": "uzunSap.baglama.2.2",
+                      "note": 5
+                    }
+                  ]
+                },
+                {
+                  "id": "1",
+                  "strings": [
+                    {
+                      "id": "uzunSap.baglama.1.1",
+                      "note": 0
+                    },
+                    {
+                      "id": "uzunSap.baglama.1.2",
+                      "note": 0
+                    },
+                    {
+                      "id": "uzunSap.baglama.1.3",
+                      "note": 0
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "karar-C-sharp",
+              "kararPitchClass": 1,
+              "courses": [
+                {
+                  "id": "3",
+                  "strings": [
+                    {
+                      "id": "uzunSap.baglama.3.1",
+                      "note": 8
+                    },
+                    {
+                      "id": "uzunSap.baglama.3.2",
+                      "note": 8
+                    }
+                  ]
+                },
+                {
+                  "id": "2",
+                  "strings": [
+                    {
+                      "id": "uzunSap.baglama.2.1",
+                      "note": 6
+                    },
+                    {
+                      "id": "uzunSap.baglama.2.2",
+                      "note": 6
+                    }
+                  ]
+                },
+                {
+                  "id": "1",
+                  "strings": [
+                    {
+                      "id": "uzunSap.baglama.1.1",
+                      "note": 1
+                    },
+                    {
+                      "id": "uzunSap.baglama.1.2",
+                      "note": 1
+                    },
+                    {
+                      "id": "uzunSap.baglama.1.3",
+                      "note": 1
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "karar-D",
+              "kararPitchClass": 2,
+              "courses": [
+                {
+                  "id": "3",
+                  "strings": [
+                    {
+                      "id": "uzunSap.baglama.3.1",
+                      "note": 9
+                    },
+                    {
+                      "id": "uzunSap.baglama.3.2",
+                      "note": 9
+                    }
+                  ]
+                },
+                {
+                  "id": "2",
+                  "strings": [
+                    {
+                      "id": "uzunSap.baglama.2.1",
+                      "note": 7
+                    },
+                    {
+                      "id": "uzunSap.baglama.2.2",
+                      "note": 7
+                    }
+                  ]
+                },
+                {
+                  "id": "1",
+                  "strings": [
+                    {
+                      "id": "uzunSap.baglama.1.1",
+                      "note": 2
+                    },
+                    {
+                      "id": "uzunSap.baglama.1.2",
+                      "note": 2
+                    },
+                    {
+                      "id": "uzunSap.baglama.1.3",
+                      "note": 2
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "karar-D-sharp",
+              "kararPitchClass": 3,
+              "courses": [
+                {
+                  "id": "3",
+                  "strings": [
+                    {
+                      "id": "uzunSap.baglama.3.1",
+                      "note": 10
+                    },
+                    {
+                      "id": "uzunSap.baglama.3.2",
+                      "note": 10
+                    }
+                  ]
+                },
+                {
+                  "id": "2",
+                  "strings": [
+                    {
+                      "id": "uzunSap.baglama.2.1",
+                      "note": 8
+                    },
+                    {
+                      "id": "uzunSap.baglama.2.2",
+                      "note": 8
+                    }
+                  ]
+                },
+                {
+                  "id": "1",
+                  "strings": [
+                    {
+                      "id": "uzunSap.baglama.1.1",
+                      "note": 3
+                    },
+                    {
+                      "id": "uzunSap.baglama.1.2",
+                      "note": 3
+                    },
+                    {
+                      "id": "uzunSap.baglama.1.3",
+                      "note": 3
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "karar-E",
+              "kararPitchClass": 4,
+              "courses": [
+                {
+                  "id": "3",
+                  "strings": [
+                    {
+                      "id": "uzunSap.baglama.3.1",
+                      "note": 11
+                    },
+                    {
+                      "id": "uzunSap.baglama.3.2",
+                      "note": 11
+                    }
+                  ]
+                },
+                {
+                  "id": "2",
+                  "strings": [
+                    {
+                      "id": "uzunSap.baglama.2.1",
+                      "note": 9
+                    },
+                    {
+                      "id": "uzunSap.baglama.2.2",
+                      "note": 9
+                    }
+                  ]
+                },
+                {
+                  "id": "1",
+                  "strings": [
+                    {
+                      "id": "uzunSap.baglama.1.1",
+                      "note": 4
+                    },
+                    {
+                      "id": "uzunSap.baglama.1.2",
+                      "note": 4
+                    },
+                    {
+                      "id": "uzunSap.baglama.1.3",
+                      "note": 4
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "karar-F",
+              "kararPitchClass": 5,
+              "courses": [
+                {
+                  "id": "3",
+                  "strings": [
+                    {
+                      "id": "uzunSap.baglama.3.1",
+                      "note": 0
+                    },
+                    {
+                      "id": "uzunSap.baglama.3.2",
+                      "note": 0
+                    }
+                  ]
+                },
+                {
+                  "id": "2",
+                  "strings": [
+                    {
+                      "id": "uzunSap.baglama.2.1",
+                      "note": 10
+                    },
+                    {
+                      "id": "uzunSap.baglama.2.2",
+                      "note": 10
+                    }
+                  ]
+                },
+                {
+                  "id": "1",
+                  "strings": [
+                    {
+                      "id": "uzunSap.baglama.1.1",
+                      "note": 5
+                    },
+                    {
+                      "id": "uzunSap.baglama.1.2",
+                      "note": 5
+                    },
+                    {
+                      "id": "uzunSap.baglama.1.3",
+                      "note": 5
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "karar-F-sharp",
+              "kararPitchClass": 6,
+              "courses": [
+                {
+                  "id": "3",
+                  "strings": [
+                    {
+                      "id": "uzunSap.baglama.3.1",
+                      "note": 1
+                    },
+                    {
+                      "id": "uzunSap.baglama.3.2",
+                      "note": 1
+                    }
+                  ]
+                },
+                {
+                  "id": "2",
+                  "strings": [
+                    {
+                      "id": "uzunSap.baglama.2.1",
+                      "note": 11
+                    },
+                    {
+                      "id": "uzunSap.baglama.2.2",
+                      "note": 11
+                    }
+                  ]
+                },
+                {
+                  "id": "1",
+                  "strings": [
+                    {
+                      "id": "uzunSap.baglama.1.1",
+                      "note": 6
+                    },
+                    {
+                      "id": "uzunSap.baglama.1.2",
+                      "note": 6
+                    },
+                    {
+                      "id": "uzunSap.baglama.1.3",
+                      "note": 6
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "karar-G",
+              "kararPitchClass": 7,
+              "courses": [
+                {
+                  "id": "3",
+                  "strings": [
+                    {
+                      "id": "uzunSap.baglama.3.1",
+                      "note": 2
+                    },
+                    {
+                      "id": "uzunSap.baglama.3.2",
+                      "note": 2
+                    }
+                  ]
+                },
+                {
+                  "id": "2",
+                  "strings": [
+                    {
+                      "id": "uzunSap.baglama.2.1",
+                      "note": 0
+                    },
+                    {
+                      "id": "uzunSap.baglama.2.2",
+                      "note": 0
+                    }
+                  ]
+                },
+                {
+                  "id": "1",
+                  "strings": [
+                    {
+                      "id": "uzunSap.baglama.1.1",
+                      "note": 7
+                    },
+                    {
+                      "id": "uzunSap.baglama.1.2",
+                      "note": 7
+                    },
+                    {
+                      "id": "uzunSap.baglama.1.3",
+                      "note": 7
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "karar-G-sharp",
+              "kararPitchClass": 8,
+              "courses": [
+                {
+                  "id": "3",
+                  "strings": [
+                    {
+                      "id": "uzunSap.baglama.3.1",
+                      "note": 3
+                    },
+                    {
+                      "id": "uzunSap.baglama.3.2",
+                      "note": 3
+                    }
+                  ]
+                },
+                {
+                  "id": "2",
+                  "strings": [
+                    {
+                      "id": "uzunSap.baglama.2.1",
+                      "note": 1
+                    },
+                    {
+                      "id": "uzunSap.baglama.2.2",
+                      "note": 1
+                    }
+                  ]
+                },
+                {
+                  "id": "1",
+                  "strings": [
+                    {
+                      "id": "uzunSap.baglama.1.1",
+                      "note": 8
+                    },
+                    {
+                      "id": "uzunSap.baglama.1.2",
+                      "note": 8
+                    },
+                    {
+                      "id": "uzunSap.baglama.1.3",
+                      "note": 8
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "karar-A",
+              "kararPitchClass": 9,
+              "courses": [
+                {
+                  "id": "3",
+                  "strings": [
+                    {
+                      "id": "uzunSap.baglama.3.1",
+                      "note": 4
+                    },
+                    {
+                      "id": "uzunSap.baglama.3.2",
+                      "note": 4
+                    }
+                  ]
+                },
+                {
+                  "id": "2",
+                  "strings": [
+                    {
+                      "id": "uzunSap.baglama.2.1",
+                      "note": 2
+                    },
+                    {
+                      "id": "uzunSap.baglama.2.2",
+                      "note": 2
+                    }
+                  ]
+                },
+                {
+                  "id": "1",
+                  "strings": [
+                    {
+                      "id": "uzunSap.baglama.1.1",
+                      "note": 9
+                    },
+                    {
+                      "id": "uzunSap.baglama.1.2",
+                      "note": 9
+                    },
+                    {
+                      "id": "uzunSap.baglama.1.3",
+                      "note": 9
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "karar-A-sharp",
+              "kararPitchClass": 10,
+              "courses": [
+                {
+                  "id": "3",
+                  "strings": [
+                    {
+                      "id": "uzunSap.baglama.3.1",
+                      "note": 5
+                    },
+                    {
+                      "id": "uzunSap.baglama.3.2",
+                      "note": 5
+                    }
+                  ]
+                },
+                {
+                  "id": "2",
+                  "strings": [
+                    {
+                      "id": "uzunSap.baglama.2.1",
+                      "note": 3
+                    },
+                    {
+                      "id": "uzunSap.baglama.2.2",
+                      "note": 3
+                    }
+                  ]
+                },
+                {
+                  "id": "1",
+                  "strings": [
+                    {
+                      "id": "uzunSap.baglama.1.1",
+                      "note": 10
+                    },
+                    {
+                      "id": "uzunSap.baglama.1.2",
+                      "note": 10
+                    },
+                    {
+                      "id": "uzunSap.baglama.1.3",
+                      "note": 10
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "karar-B",
+              "kararPitchClass": 11,
+              "courses": [
+                {
+                  "id": "3",
+                  "strings": [
+                    {
+                      "id": "uzunSap.baglama.3.1",
+                      "note": 6
+                    },
+                    {
+                      "id": "uzunSap.baglama.3.2",
+                      "note": 6
+                    }
+                  ]
+                },
+                {
+                  "id": "2",
+                  "strings": [
+                    {
+                      "id": "uzunSap.baglama.2.1",
+                      "note": 4
+                    },
+                    {
+                      "id": "uzunSap.baglama.2.2",
+                      "note": 4
+                    }
+                  ]
+                },
+                {
+                  "id": "1",
+                  "strings": [
+                    {
+                      "id": "uzunSap.baglama.1.1",
+                      "note": 11
+                    },
+                    {
+                      "id": "uzunSap.baglama.1.2",
+                      "note": 11
+                    },
+                    {
+                      "id": "uzunSap.baglama.1.3",
+                      "note": 11
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "title": "Ba\u011flama D\u00fczeni"
+        }
+      ],
+      "title": "Uzun Sap"
+    },
+    {
+      "id": "cura",
+      "nameKey": "instrument.cura",
+      "tunings": [
+        {
+          "id": "bozuk",
+          "nameKey": "tuning.bozuk",
+          "variants": [
+            {
+              "id": "karar-C",
+              "kararPitchClass": 0,
+              "courses": [
+                {
+                  "id": "1",
+                  "strings": [
+                    {
+                      "id": "cura.bozuk.1.1",
+                      "note": 0
+                    }
+                  ]
+                },
+                {
+                  "id": "2",
+                  "strings": [
+                    {
+                      "id": "cura.bozuk.2.1",
+                      "note": 5
+                    }
+                  ]
+                },
+                {
+                  "id": "3",
+                  "strings": [
+                    {
+                      "id": "cura.bozuk.3.1",
+                      "note": 7
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "karar-C-sharp",
+              "kararPitchClass": 1,
+              "courses": [
+                {
+                  "id": "1",
+                  "strings": [
+                    {
+                      "id": "cura.bozuk.1.1",
+                      "note": 1
+                    }
+                  ]
+                },
+                {
+                  "id": "2",
+                  "strings": [
+                    {
+                      "id": "cura.bozuk.2.1",
+                      "note": 6
+                    }
+                  ]
+                },
+                {
+                  "id": "3",
+                  "strings": [
+                    {
+                      "id": "cura.bozuk.3.1",
+                      "note": 8
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "karar-D",
+              "kararPitchClass": 2,
+              "courses": [
+                {
+                  "id": "1",
+                  "strings": [
+                    {
+                      "id": "cura.bozuk.1.1",
+                      "note": 2
+                    }
+                  ]
+                },
+                {
+                  "id": "2",
+                  "strings": [
+                    {
+                      "id": "cura.bozuk.2.1",
+                      "note": 7
+                    }
+                  ]
+                },
+                {
+                  "id": "3",
+                  "strings": [
+                    {
+                      "id": "cura.bozuk.3.1",
+                      "note": 9
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "karar-D-sharp",
+              "kararPitchClass": 3,
+              "courses": [
+                {
+                  "id": "1",
+                  "strings": [
+                    {
+                      "id": "cura.bozuk.1.1",
+                      "note": 3
+                    }
+                  ]
+                },
+                {
+                  "id": "2",
+                  "strings": [
+                    {
+                      "id": "cura.bozuk.2.1",
+                      "note": 8
+                    }
+                  ]
+                },
+                {
+                  "id": "3",
+                  "strings": [
+                    {
+                      "id": "cura.bozuk.3.1",
+                      "note": 10
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "karar-E",
+              "kararPitchClass": 4,
+              "courses": [
+                {
+                  "id": "1",
+                  "strings": [
+                    {
+                      "id": "cura.bozuk.1.1",
+                      "note": 4
+                    }
+                  ]
+                },
+                {
+                  "id": "2",
+                  "strings": [
+                    {
+                      "id": "cura.bozuk.2.1",
+                      "note": 9
+                    }
+                  ]
+                },
+                {
+                  "id": "3",
+                  "strings": [
+                    {
+                      "id": "cura.bozuk.3.1",
+                      "note": 11
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "karar-F",
+              "kararPitchClass": 5,
+              "courses": [
+                {
+                  "id": "1",
+                  "strings": [
+                    {
+                      "id": "cura.bozuk.1.1",
+                      "note": 5
+                    }
+                  ]
+                },
+                {
+                  "id": "2",
+                  "strings": [
+                    {
+                      "id": "cura.bozuk.2.1",
+                      "note": 10
+                    }
+                  ]
+                },
+                {
+                  "id": "3",
+                  "strings": [
+                    {
+                      "id": "cura.bozuk.3.1",
+                      "note": 0
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "karar-F-sharp",
+              "kararPitchClass": 6,
+              "courses": [
+                {
+                  "id": "1",
+                  "strings": [
+                    {
+                      "id": "cura.bozuk.1.1",
+                      "note": 6
+                    }
+                  ]
+                },
+                {
+                  "id": "2",
+                  "strings": [
+                    {
+                      "id": "cura.bozuk.2.1",
+                      "note": 11
+                    }
+                  ]
+                },
+                {
+                  "id": "3",
+                  "strings": [
+                    {
+                      "id": "cura.bozuk.3.1",
+                      "note": 1
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "karar-G",
+              "kararPitchClass": 7,
+              "courses": [
+                {
+                  "id": "1",
+                  "strings": [
+                    {
+                      "id": "cura.bozuk.1.1",
+                      "note": 7
+                    }
+                  ]
+                },
+                {
+                  "id": "2",
+                  "strings": [
+                    {
+                      "id": "cura.bozuk.2.1",
+                      "note": 0
+                    }
+                  ]
+                },
+                {
+                  "id": "3",
+                  "strings": [
+                    {
+                      "id": "cura.bozuk.3.1",
+                      "note": 2
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "karar-G-sharp",
+              "kararPitchClass": 8,
+              "courses": [
+                {
+                  "id": "1",
+                  "strings": [
+                    {
+                      "id": "cura.bozuk.1.1",
+                      "note": 8
+                    }
+                  ]
+                },
+                {
+                  "id": "2",
+                  "strings": [
+                    {
+                      "id": "cura.bozuk.2.1",
+                      "note": 1
+                    }
+                  ]
+                },
+                {
+                  "id": "3",
+                  "strings": [
+                    {
+                      "id": "cura.bozuk.3.1",
+                      "note": 3
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "karar-A",
+              "kararPitchClass": 9,
+              "courses": [
+                {
+                  "id": "1",
+                  "strings": [
+                    {
+                      "id": "cura.bozuk.1.1",
+                      "note": 9
+                    }
+                  ]
+                },
+                {
+                  "id": "2",
+                  "strings": [
+                    {
+                      "id": "cura.bozuk.2.1",
+                      "note": 2
+                    }
+                  ]
+                },
+                {
+                  "id": "3",
+                  "strings": [
+                    {
+                      "id": "cura.bozuk.3.1",
+                      "note": 4
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "karar-A-sharp",
+              "kararPitchClass": 10,
+              "courses": [
+                {
+                  "id": "1",
+                  "strings": [
+                    {
+                      "id": "cura.bozuk.1.1",
+                      "note": 10
+                    }
+                  ]
+                },
+                {
+                  "id": "2",
+                  "strings": [
+                    {
+                      "id": "cura.bozuk.2.1",
+                      "note": 3
+                    }
+                  ]
+                },
+                {
+                  "id": "3",
+                  "strings": [
+                    {
+                      "id": "cura.bozuk.3.1",
+                      "note": 5
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "karar-B",
+              "kararPitchClass": 11,
+              "courses": [
+                {
+                  "id": "1",
+                  "strings": [
+                    {
+                      "id": "cura.bozuk.1.1",
+                      "note": 11
+                    }
+                  ]
+                },
+                {
+                  "id": "2",
+                  "strings": [
+                    {
+                      "id": "cura.bozuk.2.1",
+                      "note": 4
+                    }
+                  ]
+                },
+                {
+                  "id": "3",
+                  "strings": [
+                    {
+                      "id": "cura.bozuk.3.1",
+                      "note": 6
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "title": "Bozuk (Kara D\u00fczen)"
+        },
+        {
+          "id": "baglama",
+          "nameKey": "tuning.baglama",
+          "variants": [
+            {
+              "id": "karar-C",
+              "kararPitchClass": 0,
+              "courses": [
+                {
+                  "id": "1",
+                  "strings": [
+                    {
+                      "id": "cura.baglama.1.1",
+                      "note": 0
+                    }
+                  ]
+                },
+                {
+                  "id": "2",
+                  "strings": [
+                    {
+                      "id": "cura.baglama.2.1",
+                      "note": 5
+                    }
+                  ]
+                },
+                {
+                  "id": "3",
+                  "strings": [
+                    {
+                      "id": "cura.baglama.3.1",
+                      "note": 10
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "karar-C-sharp",
+              "kararPitchClass": 1,
+              "courses": [
+                {
+                  "id": "1",
+                  "strings": [
+                    {
+                      "id": "cura.baglama.1.1",
+                      "note": 1
+                    }
+                  ]
+                },
+                {
+                  "id": "2",
+                  "strings": [
+                    {
+                      "id": "cura.baglama.2.1",
+                      "note": 6
+                    }
+                  ]
+                },
+                {
+                  "id": "3",
+                  "strings": [
+                    {
+                      "id": "cura.baglama.3.1",
+                      "note": 11
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "karar-D",
+              "kararPitchClass": 2,
+              "courses": [
+                {
+                  "id": "1",
+                  "strings": [
+                    {
+                      "id": "cura.baglama.1.1",
+                      "note": 2
+                    }
+                  ]
+                },
+                {
+                  "id": "2",
+                  "strings": [
+                    {
+                      "id": "cura.baglama.2.1",
+                      "note": 7
+                    }
+                  ]
+                },
+                {
+                  "id": "3",
+                  "strings": [
+                    {
+                      "id": "cura.baglama.3.1",
+                      "note": 0
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "karar-D-sharp",
+              "kararPitchClass": 3,
+              "courses": [
+                {
+                  "id": "1",
+                  "strings": [
+                    {
+                      "id": "cura.baglama.1.1",
+                      "note": 3
+                    }
+                  ]
+                },
+                {
+                  "id": "2",
+                  "strings": [
+                    {
+                      "id": "cura.baglama.2.1",
+                      "note": 8
+                    }
+                  ]
+                },
+                {
+                  "id": "3",
+                  "strings": [
+                    {
+                      "id": "cura.baglama.3.1",
+                      "note": 1
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "karar-E",
+              "kararPitchClass": 4,
+              "courses": [
+                {
+                  "id": "1",
+                  "strings": [
+                    {
+                      "id": "cura.baglama.1.1",
+                      "note": 4
+                    }
+                  ]
+                },
+                {
+                  "id": "2",
+                  "strings": [
+                    {
+                      "id": "cura.baglama.2.1",
+                      "note": 9
+                    }
+                  ]
+                },
+                {
+                  "id": "3",
+                  "strings": [
+                    {
+                      "id": "cura.baglama.3.1",
+                      "note": 2
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "karar-F",
+              "kararPitchClass": 5,
+              "courses": [
+                {
+                  "id": "1",
+                  "strings": [
+                    {
+                      "id": "cura.baglama.1.1",
+                      "note": 5
+                    }
+                  ]
+                },
+                {
+                  "id": "2",
+                  "strings": [
+                    {
+                      "id": "cura.baglama.2.1",
+                      "note": 10
+                    }
+                  ]
+                },
+                {
+                  "id": "3",
+                  "strings": [
+                    {
+                      "id": "cura.baglama.3.1",
+                      "note": 3
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "karar-F-sharp",
+              "kararPitchClass": 6,
+              "courses": [
+                {
+                  "id": "1",
+                  "strings": [
+                    {
+                      "id": "cura.baglama.1.1",
+                      "note": 6
+                    }
+                  ]
+                },
+                {
+                  "id": "2",
+                  "strings": [
+                    {
+                      "id": "cura.baglama.2.1",
+                      "note": 11
+                    }
+                  ]
+                },
+                {
+                  "id": "3",
+                  "strings": [
+                    {
+                      "id": "cura.baglama.3.1",
+                      "note": 4
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "karar-G",
+              "kararPitchClass": 7,
+              "courses": [
+                {
+                  "id": "1",
+                  "strings": [
+                    {
+                      "id": "cura.baglama.1.1",
+                      "note": 7
+                    }
+                  ]
+                },
+                {
+                  "id": "2",
+                  "strings": [
+                    {
+                      "id": "cura.baglama.2.1",
+                      "note": 0
+                    }
+                  ]
+                },
+                {
+                  "id": "3",
+                  "strings": [
+                    {
+                      "id": "cura.baglama.3.1",
+                      "note": 5
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "karar-G-sharp",
+              "kararPitchClass": 8,
+              "courses": [
+                {
+                  "id": "1",
+                  "strings": [
+                    {
+                      "id": "cura.baglama.1.1",
+                      "note": 8
+                    }
+                  ]
+                },
+                {
+                  "id": "2",
+                  "strings": [
+                    {
+                      "id": "cura.baglama.2.1",
+                      "note": 1
+                    }
+                  ]
+                },
+                {
+                  "id": "3",
+                  "strings": [
+                    {
+                      "id": "cura.baglama.3.1",
+                      "note": 6
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "karar-A",
+              "kararPitchClass": 9,
+              "courses": [
+                {
+                  "id": "1",
+                  "strings": [
+                    {
+                      "id": "cura.baglama.1.1",
+                      "note": 9
+                    }
+                  ]
+                },
+                {
+                  "id": "2",
+                  "strings": [
+                    {
+                      "id": "cura.baglama.2.1",
+                      "note": 2
+                    }
+                  ]
+                },
+                {
+                  "id": "3",
+                  "strings": [
+                    {
+                      "id": "cura.baglama.3.1",
+                      "note": 7
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "karar-A-sharp",
+              "kararPitchClass": 10,
+              "courses": [
+                {
+                  "id": "1",
+                  "strings": [
+                    {
+                      "id": "cura.baglama.1.1",
+                      "note": 10
+                    }
+                  ]
+                },
+                {
+                  "id": "2",
+                  "strings": [
+                    {
+                      "id": "cura.baglama.2.1",
+                      "note": 3
+                    }
+                  ]
+                },
+                {
+                  "id": "3",
+                  "strings": [
+                    {
+                      "id": "cura.baglama.3.1",
+                      "note": 8
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "karar-B",
+              "kararPitchClass": 11,
+              "courses": [
+                {
+                  "id": "1",
+                  "strings": [
+                    {
+                      "id": "cura.baglama.1.1",
+                      "note": 11
+                    }
+                  ]
+                },
+                {
+                  "id": "2",
+                  "strings": [
+                    {
+                      "id": "cura.baglama.2.1",
+                      "note": 4
+                    }
+                  ]
+                },
+                {
+                  "id": "3",
+                  "strings": [
+                    {
+                      "id": "cura.baglama.3.1",
+                      "note": 9
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "title": "Ba\u011flama D\u00fczeni"
+        }
+      ],
+      "title": "Cura"
+    }
+  ]
+}
