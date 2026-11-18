@@ -4,7 +4,7 @@ Swift Package Manager resolves semantic-version **Git tags**; a GitHub release i
 
 ## What CI checks
 
-CI runs for pull requests and pushes to `main`, and can be dispatched manually. It tests the Swift runtime on macOS, builds release products and the iOS simulator runtime, tests Python 3.9 and 3.12 (including CPU training integration on 3.12), and runs the browser controller/worklet tests on Node 22. No personal recordings, pretrained weights or secrets are required.
+CI runs for pull requests and pushes to `main`, and can be dispatched manually. It tests the Swift runtime on macOS, builds release products and the iOS simulator runtime, tests Python 3.9 on Ubuntu 22.04 and 3.12 on Ubuntu 24.04 (including CPU training integration on 3.12), and runs the browser controller/worklet tests on Node 22. No personal recordings, pretrained weights or secrets are required.
 
 Release tags reuse the same checks. Only the final publishing job has `contents: write`; other jobs have read-only repository permissions. Official actions are pinned to immutable commits. The workflow uses GitHub's ephemeral token rather than a personal access token.
 

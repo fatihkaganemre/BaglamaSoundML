@@ -39,12 +39,16 @@ jobs:
 
   python:
     name: Python ${{ matrix.python }}
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
     timeout-minutes: 20
     strategy:
       fail-fast: false
       matrix:
-        python: ['3.9', '3.12']
+        include:
+          - python: '3.9'
+            os: ubuntu-22.04
+          - python: '3.12'
+            os: ubuntu-24.04
     env:
       PYTHONDONTWRITEBYTECODE: '1'
     steps:
@@ -66,7 +70,7 @@ jobs:
 
   javascript:
     name: Browser controller and worklet tests
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
