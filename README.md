@@ -19,6 +19,8 @@ The demo renders a lower-course pluck at A4 = 440 Hz. See the [Swift integration
 
 ## Local playground
 
+![Playground tools for generating and comparing notes, detecting final tone, and predicting the second half of a recording](docs/images/playground-features.png)
+
 ```sh
 python3 -m venv .venv
 .venv/bin/python3 -m pip install -e .
@@ -26,6 +28,14 @@ make start
 ```
 
 Open [the local app](http://127.0.0.1:8765/) to try open-string final-tone detection or compare synthesized audio with recordings. The detector includes a synthetic example. Generation requires a compatible model.
+
+### Generate & compare
+
+![Playground showing pitch and synthesis settings, a generated waveform, and listening feedback controls](docs/images/playground-generate.png)
+
+### Final tone detector
+
+![Playground showing microphone and WAV inputs for detecting the tuning of an open-string strum](docs/images/playground-final-tone.png)
 
 [Playground and training guide](docs/local-playground.md) · [Recording format](docs/data-format.md) · [Commands](COMMANDS.md)
 
