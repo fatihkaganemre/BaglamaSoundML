@@ -1,10 +1,8 @@
-# Using published package versions
+# Published versions
 
-Official versions are published by the repository owner. Using the package does not require repository write access, release permissions, or a GitHub personal access token.
+Find version tags and any accompanying model downloads on [GitHub Releases](https://github.com/fatihkaganemre/BaglamaSoundML/releases).
 
-In Xcode, add `https://github.com/fatihkaganemre/BaglamaSoundML.git`, select the **BaglamaSoundML** product, and choose a published version from the repository's [Releases](https://github.com/fatihkaganemre/BaglamaSoundML/releases). Until a version exists, the default branch can be used for experimentation.
-
-After an example version `0.1.0` has actually been published, another Swift package can declare:
+Use the corresponding semantic version in Xcode or in your Swift package:
 
 ```swift
 .package(
@@ -13,8 +11,8 @@ After an example version `0.1.0` has actually been published, another Swift pack
 )
 ```
 
-Add `.product(name: "BaglamaSoundML", package: "BaglamaSoundML")` to your target dependencies. Inspect the README at the chosen version for available APIs and supported platforms. An exact version requirement can be used when reproducibility is needed.
+Add `.product(name: "BaglamaSoundML", package: "BaglamaSoundML")` to your target dependencies. Use an exact version requirement when you need a reproducible build.
 
-Releases contain source code, not private recordings, trained weights, feedback databases, or generated audio. The app supplies its own portable model for synthesis. Python research tools do not ship inside the Swift runtime, and a release does not make unfinished Swift APIs available.
+The Swift package takes a portable JSON model provided by your app. When a release offers a model, download its JSON separately and add it to your app’s resources. You can also [export your own model](swift.md). A portable export contains inference parameters and frequency ranges. Original recordings, training manifests, feedback databases, and generated audio stay local.
 
-Public users may clone/fork the project and propose changes through pull requests; this does not grant write access to this repository or permission to publish its official releases.
+The repository owner publishes official versions. Installing the package requires only read access.
