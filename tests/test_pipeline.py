@@ -4,12 +4,46 @@ import unittest
 import zipfile
 from pathlib import Path
 import numpy as np
-from baglama_sound_ml.audio import RATE, pitch, write_wav
+from baglama_sound_ml.audio import RATE, pitch, read_wav, write_wav
+from baglama_sound_ml.continuation import compare_continuations
 from baglama_sound_ml.dataset import import_packs
 from baglama_sound_ml.synthesis import sample, neural
 
 
 class PipelineTests(unittest.TestCase):
+    def test_midpoint_prediction_does_not_use_the_hidden_tail(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            time = np.arange(RATE) / RATE
+            note = 0.5 * np.cos(2 * np.pi * 110 * time) * np.exp(-3 * time)
+            midpoint = RATE // 2
+            write_wav(root / "first.wav", note)
+            write_wav(root / "second.wav", np.concatenate((note[:midpoint], -0.2 * note[midpoint:])))
+            rows = [dict(identity=name, file=f"{name}.wav", course="ust", frequency_hz=220)
+                    for name in ("first", "second")]
+            (root / "manifest.json").write_text(json.dumps(dict(recordings=rows)))
+            model = root / "fixture.npz"
+            weights = {"mean": np.zeros(25), "scale": np.ones(25)}
+            for layer, inputs, outputs in ((0, 5, 48), (2, 48, 48), (4, 48, 25)):
+                weights[f"{layer}.weight"] = np.zeros((outputs, inputs))
+                weights[f"{layer}.bias"] = np.zeros(outputs)
+            metadata = dict(schema_version=1, training_identities=["training"],
+                            validation_identities=["first", "second"], holdout_variant="held")
+            np.savez(model, **weights, metadata=np.array(json.dumps(metadata)))
+
+            output = root / "report"
+            first, second = compare_continuations(root, model, output)["results"]
+            self.assertEqual(first["cut_samples"], midpoint)
+            self.assertAlmostEqual(first["prefix_pitch_hz"], 110, delta=0.1)
+            for method in ("prefix-decay", "neural-envelope"):
+                audio, _ = read_wav(output / first["clips"][method])
+                other, _ = read_wav(output / second["clips"][method])
+                prefix, _ = read_wav(output / first["clips"]["prefix"])
+                self.assertEqual(len(audio), RATE)
+                np.testing.assert_array_equal(audio, other)
+                np.testing.assert_array_equal(audio[:midpoint], prefix)
+                self.assertNotEqual(first["methods"][method], second["methods"][method])
+
     def test_import_deduplicates_waveforms_and_excludes_uncertain_labels(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)

@@ -17,6 +17,7 @@ import zipfile
 import numpy as np
 from .audio import RATE, finish, validate_request
 from .capture_catalog import catalog, validate_label
+from .continuation import compare_continuations
 from .feedback_store import FeedbackStore
 from .final_tone import detect_final_tone, synthetic_strum
 from .final_tone_cases import FinalToneCases
@@ -242,6 +243,14 @@ def make_handler(app: LabApplication):
                     return self.response(200,app.library.import_archive(io.BytesIO(content),Path(str(body.get('filename','Imported ZIP'))).name))
                 if path=='/api/renders':
                     return self.response(200,app.generate(body))
+                if path=='/api/continuations':
+                    if not app.model.is_file() or not (app.dataset/'manifest.json').is_file():
+                        raise ValueError('Train a local model and restart the app with its matching dataset to run this experiment.')
+                    name='continuation-'+secrets.token_hex(8)
+                    result=compare_continuations(app.dataset,app.model,app.project/'outputs'/name)
+                    return self.response(200,dict(report=f'/{name}/index.html',
+                                                  recordings=result['recordings'],
+                                                  skipped=len(result['skipped'])))
                 if path=='/api/comparisons':
                     return self.response(200,app.feedback.comparison(str(body.get('first','')),str(body.get('second',''))))
                 if len(parts)==4 and parts[0]=='api' and parts[1] in ('samples','renders') and parts[3] in ('trash','restore'):

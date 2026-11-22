@@ -36,7 +36,7 @@ class LocalServerTests(unittest.TestCase):
             self.assertEqual(result.exception.code,403)
         self.assertEqual(self.app.library.samples(),[])
     def test_invalid_recording_and_missing_model_return_actionable_errors(self):
-        for route,body in (('/api/recordings',{}),('/api/renders',dict(method='neural',frequencyHertz=110,course='ust',duration=.8))):
+        for route,body in (('/api/recordings',{}),('/api/continuations',{}),('/api/renders',dict(method='neural',frequencyHertz=110,course='ust',duration=.8))):
             with self.assertRaises(HTTPError) as result:self.post(route,body)
             self.assertEqual(result.exception.code,400)
             self.assertIn('error',json.loads(result.exception.read()))

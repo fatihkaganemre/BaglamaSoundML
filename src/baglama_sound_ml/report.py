@@ -7,7 +7,7 @@ import shutil
 import numpy as np
 from .audio import RATE, pitch, read_wav, write_wav
 from .dataset import load_dataset
-from .harmonics import spectral_distance
+from .harmonics import envelope_distance, spectral_distance
 from .neural import load_model
 from .synthesis import sample, neural
 
@@ -48,10 +48,13 @@ def compare(directory: Path, model: Path, output: Path) -> dict:
             estimates = [value for value in estimates if value is not None]
             error = float(np.median([1200*np.log2(value/hz) for value in estimates])) if estimates else None
             details.update(file=filename, estimated_pitch_error_cents=error,
+                           rms_envelope_distance_db=envelope_distance(reference, generated),
                            log_spectral_distance=spectral_distance(reference, generated))
             entry["methods"][method] = details
             error_text = f"{error:+.2f} cents" if error is not None else "period ambiguous"
-            players.append(f'<p>{method}: {error_text}<br><audio controls preload="none" src="{filename}"></audio></p>')
+            envelope_error = details["rms_envelope_distance_db"]
+            players.append(f'<p>{method} · {error_text} · envelope error {envelope_error:.1f} dB<br>'
+                           f'<audio controls preload="none" src="{filename}"></audio></p>')
         results.append(entry)
         cards.append(f'<section><h2>{html.escape(row["course"])} · {hz:.2f} Hz</h2>{"".join(players)}</section>')
     summary = dict(validation_variant=metadata["holdout_variant"], recordings=len(rows),
@@ -64,5 +67,6 @@ def compare(directory: Path, model: Path, output: Path) -> dict:
 <h1>BaglamaSoundML · held-out listening comparison</h1>
 <p>Reference: held-out recording. Sample: nearest training recording, transposed. Neural: learned harmonic envelopes with DSP-controlled pitch.</p>
 <p>This tiny dataset is an experiment. Validation selected the model checkpoint; this is not an independent test set. Spectral distance is not a listening-quality score.</p>
+<p>Envelope error compares 10 ms RMS levels relative to each clip’s loudest frame. Lower values indicate closer amplitude contours.</p>
 ''' + "\n".join(cards) + "</html>\n")
     return summary

@@ -3,7 +3,7 @@ import {LabAudio,base64} from '/lab-audio.js';
 import {SampleEditor} from '/capture-ui.js';
 const $=id=>document.getElementById(id),en=['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'],tr=['Do','Do♯','Re','Re♯','Mi','Fa','Fa♯','Sol','Sol♯','La','La♯','Si'];
 const esc=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const state={config:null,samples:[],renders:[],feedback:null,current:null,comparison:null,heard:new Set(),openSampleGroups:new Set(),sampleGroupLimits:new Map(),collapseSearchGroups:false,view:'library'};
+const state={config:null,samples:[],renders:[],feedback:null,current:null,comparison:null,heard:new Set(),openSampleGroups:new Set(),sampleGroupLimits:new Map(),collapseSearchGroups:false,view:'library',tool:'generate'};
 let editor,finalTone;
 function notify(message,error=false){$('notice').textContent=message;$('notice').classList.toggle('error',error);}
 const audio=new LabAudio(message=>$('playbackStatus').textContent=message);
@@ -11,7 +11,41 @@ async function api(path,body){const response=await fetch(path,{method:body===und
 async function guarded(action){try{await action();}catch(error){notify(error.message,true);}}
 function options(select,values,placeholder){const previous=select.value;select.replaceChildren();if(placeholder!==undefined)select.add(new Option(placeholder,''));for(const value of values)select.add(new Option(value.title,value.id));if([...select.options].some(o=>o.value===previous))select.value=previous;}
 function noteLabel(target){return tr[target.note]+' / '+en[target.note]+(target.octave!==undefined?target.octave:' · octave unspecified');}
-async function view(name){if(state.view==='finaltone'&&name!=='finaltone')finalTone?.leave();if(editor)editor.close();audio.stop();state.view=name;document.querySelectorAll('.view').forEach(panel=>panel.hidden=panel.id!=='view-'+name);document.querySelectorAll('nav button[data-view]').forEach(b=>{if(b.dataset.view===name)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current');});if(name==='library')await refreshSamples();if(name==='feedback')await refreshFeedback();}
+function leavePlaygroundTool(){
+ if(state.tool==='finaltone')finalTone?.leave();
+ if(state.tool==='continuation'){
+  $('continuationReport').contentDocument?.querySelectorAll('audio').forEach(player=>player.pause());
+ }
+}
+function selectPlaygroundTool(name){
+ if(state.tool!==name){
+  leavePlaygroundTool();
+  audio.stop();
+ }
+ state.tool=name;
+ document.querySelectorAll('.playground-tool').forEach(panel=>panel.hidden=panel.id!=='tool-'+name);
+ document.querySelectorAll('button[data-tool]').forEach(button=>{
+  button.setAttribute('aria-pressed',String(button.dataset.tool===name));
+ });
+}
+async function runContinuation(){
+ const button=$('runContinuation'),status=$('continuationStatus');
+ button.disabled=true;
+ status.textContent='Generating continuations from the recorded first halves…';
+ try{
+  const result=await api('/api/continuations',{});
+  const report=$('continuationReport'),link=$('openContinuation');
+  report.src=result.report;
+  link.href=result.report;
+  report.hidden=link.hidden=false;
+  status.textContent=`${result.recordings} completed · ${result.skipped} skipped`;
+ }catch(error){
+  status.textContent=error.message;
+ }finally{
+  button.disabled=false;
+ }
+}
+async function view(name){if(state.view==='playground'&&name!=='playground')leavePlaygroundTool();if(editor)editor.close();audio.stop();state.view=name;document.querySelectorAll('.view').forEach(panel=>panel.hidden=panel.id!=='view-'+name);document.querySelectorAll('nav button[data-view]').forEach(b=>{if(b.dataset.view===name)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current');});if(name==='library')await refreshSamples();if(name==='feedback')await refreshFeedback();}
 async function refreshSamples(){const data=await api('/api/samples?trash='+$('filterTrash').value);state.samples=data.samples;$('sampleCount').textContent=data.samples.length;const values=[...new Set(data.samples.map(r=>r.label.variantID||'unspecified'))].sort();options($('filterVariant'),values.map(v=>({id:v,title:v.replace('karar-','')})),'All final tones');renderLibrary();}
 function setupTitle(label){const inst=state.config.catalog.instruments.find(i=>i.id===label.instrumentID);const tuning=inst?.tunings.find(t=>t.id===label.tuningID);const v=tuning?.variants.find(v=>v.id===label.variantID);return (inst?.title||label.instrumentID)+' / '+(tuning?.title||label.tuningID)+' · '+(v?tr[v.kararPitchClass]+' / '+en[v.kararPitchClass]:label.variantID);}
 function sampleTitle(row){return (row.label.physicalStringNumber?'String '+row.label.physicalStringNumber:'String '+row.label.stringID)+' · '+noteLabel(row.label.target);}
@@ -77,6 +111,8 @@ async function init(){
  $('feedbackTags').innerHTML=[['synthetic','Too synthetic'],['weak-attack','Weak attack'],['short-decay','Decay too short'],['long-decay','Decay too long'],['noisy','Unwanted noise'],['wrong-pitch','Pitch sounds wrong']].map(([tag,title])=>`<label><input type="checkbox" value="${tag}">${title}</label>`).join('');
  options($('genNote'),en.map((name,i)=>({id:String(i),title:tr[i]+' / '+name})));$('genNote').value='8';
  document.querySelectorAll('nav button[data-view]').forEach(button=>button.onclick=()=>guarded(()=>view(button.dataset.view)));
+ document.querySelectorAll('button[data-tool]').forEach(button=>button.onclick=()=>selectPlaygroundTool(button.dataset.tool));
+ $('runContinuation').onclick=runContinuation;
  for (const id of ['search','filterVariant','filterQuality']) $(id).addEventListener('input', () => {
     state.collapseSearchGroups = false;
     renderLibrary();
@@ -112,14 +148,14 @@ async function init(){
     renderLibrary();
   };
  $('importZip').onclick=()=>$('zipFile').click();$('zipFile').onchange=event=>guarded(async()=>{const file=event.target.files[0];event.target.value='';if(!file)return;if(file.size>40*1024*1024)throw Error('Import one ZIP smaller than 40 MB at a time.');$('importZip').disabled=true;try{notify('Importing original captures locally…');const result=await api('/api/import',{filename:file.name,archive:base64(new Uint8Array(await file.arrayBuffer()))});await refreshSamples();notify('Imported '+result.added+' recordings; '+result.duplicates+' duplicates skipped.');}finally{$('importZip').disabled=false;}});
- document.addEventListener('click',event=>{const button=event.target.closest('button[data-action]');if(!button)return;guarded(async()=>{const action=button.dataset.action,id=button.dataset.id;button.disabled=true;try{if(action==='sample-edit'){await editor.open(state.samples.find(r=>r.id===id),sampleTitle(state.samples.find(r=>r.id===id)));}else if(action==='sample-play'){const row=state.samples.find(r=>r.id===id);await audio.playURL('/api/samples/'+id+'/audio',sampleTitle(row));}else if(action==='sample-trash'||action==='sample-restore'){editor.close();audio.stop();await api('/api/samples/'+id+'/'+(action==='sample-trash'?'trash':'restore'),{});await refreshSamples();notify(action==='sample-trash'?'Moved to Trash. Restore it using the View filter.':'Restored.');}else if(action==='render-play'){const row=state.renders.find(r=>r.id===id);await audio.playURL('/api/renders/'+id+'/audio',row?renderTitle(row):'Generated sound');}else if(action==='render-rate'){const row=state.renders.find(r=>r.id===id);await view('playground');showCandidate(row,state.feedback.ratings.find(r=>r.render_id===id));await audio.playURL('/api/renders/'+id+'/audio',renderTitle(row),$('renderWave'));}else if(action==='render-restore'){await api('/api/renders/'+id+'/restore',{});await refreshFeedback();notify('Generated candidate restored.');}else if(action==='render-trash'){audio.stop();await api('/api/renders/'+id+'/trash',{});await refreshFeedback();notify('Generated candidate hidden. Existing feedback remains saved.');}}finally{button.disabled=false;}});});
- $('generateForm').onsubmit=generate;$('replayRender').onclick=()=>guarded(()=>audio.playURL('/api/renders/'+state.current.id+'/audio',renderTitle(state.current),$('renderWave')));$('stopAudio').onclick=()=>audio.stop();
+ document.addEventListener('click',event=>{const button=event.target.closest('button[data-action]');if(!button)return;guarded(async()=>{const action=button.dataset.action,id=button.dataset.id;button.disabled=true;try{if(action==='sample-edit'){await editor.open(state.samples.find(r=>r.id===id),sampleTitle(state.samples.find(r=>r.id===id)));}else if(action==='sample-play'){const row=state.samples.find(r=>r.id===id);await audio.playURL('/api/samples/'+id+'/audio',sampleTitle(row));}else if(action==='sample-trash'||action==='sample-restore'){editor.close();audio.stop();await api('/api/samples/'+id+'/'+(action==='sample-trash'?'trash':'restore'),{});await refreshSamples();notify(action==='sample-trash'?'Moved to Trash. Restore it using the View filter.':'Restored.');}else if(action==='render-play'){const row=state.renders.find(r=>r.id===id);await audio.playURL('/api/renders/'+id+'/audio',row?renderTitle(row):'Generated sound');}else if(action==='render-rate'){const row=state.renders.find(r=>r.id===id);await view('playground');selectPlaygroundTool('generate');showCandidate(row,state.feedback.ratings.find(r=>r.render_id===id));await audio.playURL('/api/renders/'+id+'/audio',renderTitle(row),$('renderWave'));}else if(action==='render-restore'){await api('/api/renders/'+id+'/restore',{});await refreshFeedback();notify('Generated candidate restored.');}else if(action==='render-trash'){audio.stop();await api('/api/renders/'+id+'/trash',{});await refreshFeedback();notify('Generated candidate hidden. Existing feedback remains saved.');}}finally{button.disabled=false;}});});
+ $('generateForm').onsubmit=generate;$('replayRender').onclick=()=>guarded(()=>audio.playURL('/api/renders/'+state.current.id+'/audio',renderTitle(state.current),$('renderWave')));
  document.querySelectorAll('[data-preset]').forEach(button=>button.onclick=()=>{const[note,octave,course]=button.dataset.preset.split(',');$('genNote').value=note;$('genOctave').value=octave;$('genCourse').value=course;});
  $('ratingForm').onsubmit=event=>{event.preventDefault();guarded(async()=>{const button=$('ratingForm').querySelector('button[type=submit]');button.disabled=true;try{await api('/api/renders/'+state.current.id+'/feedback',{naturalness:Number($('naturalness').value),attack:Number($('attack').value),decay:Number($('decay').value),pitchImpression:$('pitchImpression').value,tags:[...document.querySelectorAll('#feedbackTags input:checked')].map(i=>i.value),note:$('ratingNote').value,favorite:$('favorite').checked});await refreshFeedback();notify('Feedback saved for this exact sound. The model and real-recording dataset have not changed.');}finally{button.disabled=false;}});};
  $('compareMethods').onclick=()=>guarded(async()=>{const buttons=$('generateForm').querySelectorAll('button');buttons.forEach(b=>b.disabled=true);try{audio.stop();notify('Generating a same-pitch ML/sample pair…');const first=await api('/api/renders',generationRequest('neural'));const second=await api('/api/renders',generationRequest('sample'));await view('feedback');await makeComparison(first.id,second.id);notify('Comparison ready. Listen to both sides, then choose your preference.');}finally{buttons.forEach(b=>b.disabled=false);}});
  $('startComparison').onclick=()=>guarded(()=>makeComparison($('compareFirst').value,$('compareSecond').value));
  for(const side of ['a','b'])$('play'+side.toUpperCase()).onclick=()=>guarded(async()=>{if(!state.comparison)return;const played=await audio.playURL(state.comparison[side==='a'?'audioA':'audioB'],'Blind clip '+side.toUpperCase());if(played){state.heard.add(side);$('comparisonHeard').textContent=state.heard.size===2?'Both clips played. Choose your preference.':'One clip played; listen to the other.';$('savePreference').disabled=state.heard.size!==2;}});
- $('renderTrash').onchange=()=>guarded(refreshFeedback);$('globalStop').onclick=()=>audio.stop();$('stopAB').onclick=()=>audio.stop();$('savePreference').onclick=()=>guarded(async()=>{if(state.heard.size!==2)throw Error('Listen to both clips first.');if(!$('preference').value)throw Error('Choose your preference.');const result=await api('/api/comparisons/'+state.comparison.id+'/feedback',{preference:$('preference').value,note:$('comparisonNote').value});$('comparisonResult').textContent='Saved. A was '+result.methodA+' ('+result.modelA.slice(0,8)+'); B was '+result.methodB+' ('+result.modelB.slice(0,8)+'). No automatic retraining.';await refreshFeedback();notify('A/B preference saved with the exact candidate pair and settings.');});
+ $('renderTrash').onchange=()=>guarded(refreshFeedback);$('stopAB').onclick=()=>audio.stop();$('savePreference').onclick=()=>guarded(async()=>{if(state.heard.size!==2)throw Error('Listen to both clips first.');if(!$('preference').value)throw Error('Choose your preference.');const result=await api('/api/comparisons/'+state.comparison.id+'/feedback',{preference:$('preference').value,note:$('comparisonNote').value});$('comparisonResult').textContent='Saved. A was '+result.methodA+' ('+result.modelA.slice(0,8)+'); B was '+result.methodB+' ('+result.modelB.slice(0,8)+'). No automatic retraining.';await refreshFeedback();notify('A/B preference saved with the exact candidate pair and settings.');});
  await refreshSamples();await refreshFeedback();notify('Local library ready · '+state.samples.length+' real recordings. Microphone off.');
 }
 init().catch(error=>notify('Could not open the lab: '+error.message+' Start it using ./scripts/listen.sh.',true));

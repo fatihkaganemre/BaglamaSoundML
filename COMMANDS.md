@@ -57,4 +57,19 @@ Advanced help:
 
 ## Local data
 
+In the local app, open **Playground → Generate rest of the signal** and choose
+**Run midpoint experiment**. The report opens in Playground.
+
+To run the same experiment from the terminal on the latest model's held-out recordings:
+
+```sh
+PYTHONPATH=src .venv/bin/python3 -m baglama_sound_ml continue-note --out outputs/continuation
+open outputs/continuation/index.html
+```
+
+The code cuts each prepared recording in half, then predicts the second half from the first.
+The report lets you hear both predictions after the same recorded prefix and compare them
+with the actual tail. To select a different training run, supply its paired `--dataset`
+and `--model`. Use a new `--out` directory for each run.
+
 Back up `data/library/` while the server is stopped, including the final-tone test-case subdirectory. Library Trash is recoverable. Synthesis exports and strum evaluation exports are separate. Recordings, feedback, trained weights and generated outputs are Git-ignored and are not part of the public checkout or Swift package.

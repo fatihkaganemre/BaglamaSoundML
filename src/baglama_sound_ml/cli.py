@@ -40,6 +40,10 @@ def main():
     reporter.add_argument("--dataset", type=Path, default=Path("data/recordings"))
     reporter.add_argument("--model", type=Path, default=Path("models/baglama.npz"))
     reporter.add_argument("--out", type=Path, default=Path("outputs/comparison"))
+    continuation = sub.add_parser("continue-note", help="Predict and score the second half of held-out plucks")
+    continuation.add_argument("--dataset", type=Path)
+    continuation.add_argument("--model", type=Path)
+    continuation.add_argument("--out", type=Path, required=True)
     for name, help_text, default in (
         ("export-swift", "Export a model for the Swift package", "models/baglama.swift.json"),
         ("playground", "Build a standalone browser synthesizer", "outputs/playground/index.html"),
@@ -76,6 +80,16 @@ def main():
         elif args.command == "compare":
             report = compare(args.dataset, args.model, args.out)
             result = dict(recordings=report["recordings"], report=str(args.out/"index.html"))
+        elif args.command == "continue-note":
+            from .continuation import compare_continuations
+            if (args.dataset is None) != (args.model is None):
+                raise ValueError("Specify both --dataset and --model, or use the latest local training run.")
+            if args.model is None:
+                latest = json.loads(Path("models/latest-training.json").read_text())
+                args.dataset, args.model = Path(latest["dataset"]), Path(latest["model"])
+            report = compare_continuations(args.dataset, args.model, args.out)
+            result = dict(recordings=report["recordings"], skipped=len(report["skipped"]),
+                          report=str(args.out / "index.html"))
         else:
             if not math.isfinite(args.cents) or abs(args.cents) > 1200:
                 raise ValueError("Cents offset must be finite and within ±1200.")

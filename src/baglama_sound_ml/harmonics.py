@@ -15,8 +15,13 @@ def features(hz: float, times: np.ndarray, course: str) -> np.ndarray:
 
 def analyze(audio: np.ndarray, hz: float, frames: int = FRAMES) -> tuple[np.ndarray, np.ndarray]:
     """Project windowed frames onto source-pitch harmonics; estimate residual energy."""
-    size = 4096
-    times = np.linspace(0, len(audio)/RATE, frames, endpoint=False)
+    # Keep at least three fundamental cycles where possible without averaging
+    # higher notes across most of their attack.
+    size = int(np.clip(2 * np.ceil(1.5 * RATE / hz), 1024, 4096))
+    duration = len(audio) / RATE
+    times = np.linspace(0, duration, frames, endpoint=False)
+    attack_times = np.arange(0, min(duration, 0.05), 0.005)
+    times = np.unique(np.round(np.concatenate((times, attack_times)) * RATE)) / RATE
     centers = np.minimum((times*RATE).astype(int), len(audio)-1)
     padded = np.pad(audio, (size//2, size//2))
     windows = np.stack([padded[i:i+size] for i in centers])
@@ -25,10 +30,24 @@ def analyze(audio: np.ndarray, hz: float, frames: int = FRAMES) -> tuple[np.ndar
     basis = np.exp(-2j*np.pi*np.outer(np.arange(size)/RATE, frequencies))
     amplitudes = 2*np.abs((windows*window) @ basis)/window.sum()
     amplitudes[:, frequencies >= RATE/2] = 0
-    energy = np.mean(windows**2, axis=1)
+    energy = (windows**2 @ window) / window.sum()
     residual = np.sqrt(np.maximum(energy - np.sum(amplitudes**2, axis=1)/2, 0))
     values = np.column_stack((amplitudes, residual))
     return times, np.log(np.maximum(values, 1e-5)).astype(np.float32)
+
+
+def envelope_distance(reference: np.ndarray, generated: np.ndarray) -> float:
+    """Mean absolute difference of peak-relative 10 ms RMS levels in dB."""
+    block_size = RATE // 100
+    blocks = min(len(reference), len(generated)) // block_size
+    if not blocks:
+        raise ValueError("Audio is too short for envelope comparison.")
+    levels = []
+    for audio in (reference, generated):
+        frames = audio[:blocks * block_size].reshape(blocks, block_size)
+        rms = np.sqrt(np.mean(frames**2, axis=1))
+        levels.append(20 * np.log10(np.maximum(rms / max(rms.max(), 1e-8), 1e-3)))
+    return float(np.mean(np.abs(levels[0] - levels[1])))
 
 
 def spectral_distance(reference: np.ndarray, generated: np.ndarray) -> float:

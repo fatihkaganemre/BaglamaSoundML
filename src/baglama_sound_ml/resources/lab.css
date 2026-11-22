@@ -19,3 +19,5 @@ nav{position:sticky;top:0;z-index:10;background:var(--bg);padding-top:10px}
 .strum-result{font-size:clamp(2rem,4vw,3.25rem);line-height:1.15;letter-spacing:-.025em;margin:0 0 1rem;overflow-wrap:anywhere}#strumCaseForm{margin-top:20px}#view-finaltone>details{margin-top:20px}
 
 .string-observation{border-top:1px solid #536968;padding:12px 0}.string-observation h4{margin:0 0 10px}
+.playground-tools button[aria-pressed=true]{border-color:var(--gold);background:#314440;color:white}
+#continuationReport{width:100%;height:65vh;margin-top:16px;border:1px solid var(--line);border-radius:14px}
