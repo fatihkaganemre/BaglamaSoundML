@@ -1,4 +1,4 @@
-"""Local real-recording archive. Original audio is retained; removal is recoverable."""
+"""Local real-recording library with saved trims and recoverable Trash."""
 from __future__ import annotations
 from pathlib import Path
 from datetime import datetime, timezone
@@ -33,6 +33,10 @@ class LocalLibrary:
                   source TEXT NOT NULL, detail TEXT NOT NULL, session TEXT NOT NULL,
                   created_at TEXT NOT NULL, deleted_at TEXT);
                 CREATE TABLE IF NOT EXISTS sample_edits (sample_id TEXT PRIMARY KEY REFERENCES samples(id), start_frame INTEGER NOT NULL, end_frame INTEGER NOT NULL, analysis TEXT NOT NULL);
+                CREATE TABLE IF NOT EXISTS trimmed_audio (
+                  sample_id TEXT PRIMARY KEY REFERENCES samples(id), pcm BLOB NOT NULL);
+                CREATE TABLE IF NOT EXISTS trimmed_identities (
+                  identity TEXT PRIMARY KEY, sample_id TEXT NOT NULL REFERENCES samples(id));
                 CREATE TABLE IF NOT EXISTS renders (
                   id TEXT PRIMARY KEY, identity TEXT NOT NULL, parameters TEXT NOT NULL,
                   model_id TEXT NOT NULL, method TEXT NOT NULL, favorite INTEGER NOT NULL DEFAULT 0,
@@ -46,6 +50,9 @@ class LocalLibrary:
                   b_id TEXT NOT NULL REFERENCES renders(id), preference TEXT,
                   note TEXT, updated_at TEXT NOT NULL);
             ''')
+            for row in db.execute('SELECT sample_id FROM trimmed_audio'):
+                # Finish cleanup if a previous process exited after committing the trim.
+                (self.root/'originals'/f'{row["sample_id"]}.f32').unlink(missing_ok=True)
 
     @contextmanager
     def connect(self):
@@ -67,21 +74,30 @@ class LocalLibrary:
         raw = audio.astype('<f4').tobytes()
         identity = hashlib.sha256(raw).hexdigest()
         sample_id = identity[:32]
+        if analysis is not None and not isinstance(analysis,dict):
+            raise ValueError('Pitch analysis must be an object.')
+        result = analysis if analysis is not None else analyze_capture(audio, rate)
         with self.connect() as db:
-            existing = db.execute('SELECT id,deleted_at FROM samples WHERE identity=?',(identity,)).fetchone()
+            db.execute('BEGIN IMMEDIATE')
+            existing = db.execute('''SELECT id,deleted_at FROM samples WHERE identity=?
+                                     UNION ALL
+                                     SELECT samples.id,samples.deleted_at FROM trimmed_identities
+                                     JOIN samples ON samples.id=trimmed_identities.sample_id
+                                     WHERE trimmed_identities.identity=?''',(identity,identity)).fetchone()
             if existing:
                 if existing['deleted_at']:
                     raise ValueError('This recording is already in Trash. Restore it in the library.')
                 return dict(id=existing['id'], duplicate=True)
-        if analysis is not None and not isinstance(analysis,dict):
-            raise ValueError('Pitch analysis must be an object.')
-        result = analysis if analysis is not None else analyze_capture(audio, rate)
-        path = self.root/'originals'/f'{sample_id}.f32'
-        temporary = path.with_suffix('.'+uuid.uuid4().hex+'.tmp')
-        temporary.write_bytes(raw)
-        temporary.replace(path)
-        with self.connect() as db:
-            db.execute('INSERT OR IGNORE INTO samples VALUES (?,?,?,?,?,?,?,?,?,?,NULL)',
+            if db.execute('SELECT 1 FROM samples WHERE id=?',(sample_id,)).fetchone():
+                sample_id = uuid.uuid4().hex
+            path = self.root/'originals'/f'{sample_id}.f32'
+            temporary = path.with_suffix('.'+uuid.uuid4().hex+'.tmp')
+            try:
+                temporary.write_bytes(raw)
+                temporary.replace(path)
+            finally:
+                temporary.unlink(missing_ok=True)
+            db.execute('INSERT INTO samples VALUES (?,?,?,?,?,?,?,?,?,?,NULL)',
                        (sample_id, identity, json.dumps(label), json.dumps(result), rate, len(audio), source,
                         detail[:200], session[:100], now()))
         return dict(id=sample_id, duplicate=False)
@@ -134,19 +150,26 @@ class LocalLibrary:
 
     def samples(self, trash: bool = False) -> list[dict]:
         with self.connect() as db:
-            rows = db.execute('SELECT * FROM samples WHERE deleted_at IS '+('NOT NULL' if trash else 'NULL')+' ORDER BY created_at DESC,id').fetchall()
+            return self._sample_rows(db, trash)
+
+    def _sample_rows(self, db, trash: bool) -> list[dict]:
+        rows = db.execute('''SELECT samples.*, sample_edits.start_frame, sample_edits.end_frame,
+                             sample_edits.analysis AS trim_analysis FROM samples
+                             LEFT JOIN sample_edits ON sample_edits.sample_id=samples.id
+                             WHERE deleted_at IS '''+('NOT NULL' if trash else 'NULL')+
+                          ' ORDER BY created_at DESC,id').fetchall()
         result=[]
         for row in rows:
             item=dict(row)
             item['label']=json.loads(item['label'])
             item['analysis']=json.loads(item['analysis'])
             item['originalFrames']=item['frames']
-            with self.connect() as db:
-                edit=db.execute('SELECT * FROM sample_edits WHERE sample_id=?',(item['id'],)).fetchone()
-            item['startFrame']=edit['start_frame'] if edit else 0
-            item['endFrame']=edit['end_frame'] if edit else item['frames']
-            if edit:
-                item['analysis']=json.loads(edit['analysis'])
+            start, end = item.pop('start_frame'), item.pop('end_frame')
+            analysis = item.pop('trim_analysis')
+            item['startFrame']=start if start is not None else 0
+            item['endFrame']=end if end is not None else item['frames']
+            if analysis is not None:
+                item['analysis']=json.loads(analysis)
             item['frames']=item['endFrame']-item['startFrame']
             item['duration']=item['frames']/item['rate']
             item['kind']='real'
@@ -161,29 +184,61 @@ class LocalLibrary:
         return dict(row)
 
     def real_audio(self, sample_id: str, original: bool = False) -> tuple[np.ndarray, int]:
-        row=self.sample(sample_id)
-        audio=np.frombuffer((self.root/'originals'/f'{row["id"]}.f32').read_bytes(),dtype='<f4').astype(np.float64)
-        if not original:
-            with self.connect() as db:
-                edit=db.execute('SELECT * FROM sample_edits WHERE sample_id=?',(sample_id,)).fetchone()
-            if edit:
-                audio=audio[edit['start_frame']:edit['end_frame']]
-        return audio,row['rate']
+        audio, row = self.sample_audio(sample_id, original)
+        return audio, row['rate']
 
-    def trim(self, sample_id: str, start: int, end: int) -> dict:
-        row=self.sample(sample_id)
-        if row['deleted_at']:
-            raise ValueError('Restore this sample before editing it.')
-        if type(start) is not int or type(end) is not int or not 0 <= start < end <= row['frames'] or end-start < row['rate']*.2:
-            raise ValueError('Select at least 0.20 seconds within the original sample.')
-        audio,rate=self.real_audio(sample_id,original=True)
-        analysis=analyze_capture(audio[start:end],rate)
+    def sample_audio(self, sample_id: str, original: bool = False) -> tuple[np.ndarray, dict]:
         with self.connect() as db:
-            if start==0 and end==row['frames']:
-                db.execute('DELETE FROM sample_edits WHERE sample_id=?',(sample_id,))
-            else:
-                db.execute('INSERT OR REPLACE INTO sample_edits VALUES (?,?,?,?)',(sample_id,start,end,json.dumps(analysis)))
-        return dict(saved=True,startFrame=start,endFrame=end)
+            db.execute('BEGIN')
+            return self._read_sample_audio(db, sample_id, original)
+
+    def _read_sample_audio(self, db, sample_id: str, original: bool) -> tuple[np.ndarray, dict]:
+        row = db.execute('''SELECT samples.*, sample_edits.start_frame, sample_edits.end_frame,
+                            sample_edits.analysis AS trim_analysis, trimmed_audio.pcm FROM samples
+                            LEFT JOIN sample_edits ON sample_edits.sample_id=samples.id
+                            LEFT JOIN trimmed_audio ON trimmed_audio.sample_id=samples.id
+                            WHERE samples.id=?''', (sample_id,)).fetchone()
+        if row is None:
+            raise KeyError('Sample not found.')
+        metadata = dict(row)
+        raw = metadata.pop('pcm')
+        if raw is None:
+            raw = (self.root/'originals'/f'{sample_id}.f32').read_bytes()
+        audio = np.frombuffer(raw, dtype='<f4').astype(np.float64)
+        if not original and row['start_frame'] is not None:
+            audio = audio[row['start_frame']:row['end_frame']]
+        return audio, metadata
+
+    def trim(self, sample_id: str, start: int, end: int, expected_identity: str | None = None) -> dict:
+        with self.connect() as db:
+            db.execute('BEGIN IMMEDIATE')
+            audio, row = self._read_sample_audio(db, sample_id, original=True)
+            if row['deleted_at']:
+                raise ValueError('Restore this sample before editing it.')
+            if expected_identity is not None and expected_identity != row['identity']:
+                raise ValueError('This sample changed. Reopen the editor before saving.')
+            rate = row['rate']
+            if type(start) is not int or type(end) is not int or not 0 <= start < end <= len(audio) or end-start < rate*.2:
+                raise ValueError('Select at least 0.20 seconds within the stored sample.')
+            selected = audio[start:end]
+            raw = selected.astype('<f4').tobytes()
+            identity = hashlib.sha256(raw).hexdigest()
+            if db.execute('''SELECT 1 FROM samples WHERE identity=? AND id<>?
+                             UNION ALL
+                             SELECT 1 FROM trimmed_identities WHERE identity=? AND sample_id<>?''',
+                          (identity,sample_id,identity,sample_id)).fetchone():
+                raise ValueError('This selection matches an existing recording in the library or Trash.')
+            changed = identity != row['identity']
+            if changed:
+                db.execute('PRAGMA secure_delete=ON')
+                db.execute('INSERT OR IGNORE INTO trimmed_identities VALUES (?,?)', (row['identity'],sample_id))
+                db.execute('INSERT OR REPLACE INTO trimmed_audio VALUES (?,?)', (sample_id,raw))
+                db.execute('UPDATE samples SET identity=?, frames=?, analysis=? WHERE id=?',
+                           (identity,len(selected),json.dumps(analyze_capture(selected,rate)),sample_id))
+            db.execute('DELETE FROM sample_edits WHERE sample_id=?', (sample_id,))
+        if changed:
+            (self.root/'originals'/f'{sample_id}.f32').unlink(missing_ok=True)
+        return dict(saved=True,startFrame=0,endFrame=end-start,identity=identity)
 
     def trash(self, kind: str, identity: str, restore: bool = False):
         table='samples' if kind=='samples' else 'renders' if kind=='renders' else None
@@ -196,10 +251,11 @@ class LocalLibrary:
 
     def export_real(self) -> bytes:
         output=io.BytesIO()
-        with zipfile.ZipFile(output,'w',zipfile.ZIP_DEFLATED) as pack:
-            for row in self.samples():
+        with self.connect() as db, zipfile.ZipFile(output,'w',zipfile.ZIP_DEFLATED) as pack:
+            db.execute('BEGIN')
+            for row in self._sample_rows(db, trash=False):
                 prefix=f'Samples/{row["id"]}'
-                audio,_=self.real_audio(row['id'])
+                audio,_=self._read_sample_audio(db,row['id'],original=False)
                 pack.writestr(prefix+'.f32',audio.astype('<f4').tobytes())
                 pack.writestr(prefix+'.json',json.dumps(dict(id=row['id'],sampleRate=row['rate'],
                     audioFormat='pcm_f32le_mono',duration=row['duration'],label=row['label'],

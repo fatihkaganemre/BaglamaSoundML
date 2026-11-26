@@ -4,7 +4,7 @@ export class SampleEditor {
  constructor({api,audio,notify,saved}) {
  Object.assign(this,{api,audio,notify,saved}); this.take=null;this.sequence=0;
  $('playTake').onclick=()=>this.guard(()=>{const s=this.selection();return audio.playSamples(s.samples,this.take.rate,'Sample selection');});
- $('playFullTake').onclick=()=>this.guard(()=>audio.playSamples(this.take.samples,this.take.rate,'Original sample'));
+ $('playFullTake').onclick=()=>this.guard(()=>audio.playSamples(this.take.samples,this.take.rate,'Stored sample'));
  for(const id of ['trimStart','trimEnd'])$(id).addEventListener('input',()=>this.trimSeconds());
  $('trimStartRange').addEventListener('input',()=>this.setTrim(Number($('trimStartRange').value),this.trim.endFrame));
  $('trimEndRange').addEventListener('input',()=>this.setTrim(this.trim.startFrame,Number($('trimEndRange').value)));
@@ -12,20 +12,38 @@ export class SampleEditor {
  }
  async guard(action){try{await action();}catch(e){this.notify(e.message,true);}}
  async open(row,title){
- const sequence=++this.sequence;this.audio.stop();this.notify('Loading original waveform…');
+ const sequence=++this.sequence;this.audio.stop();this.notify('Loading waveform…');
+ this.sampleId=row.id;
  const data=await this.api('/api/samples/'+row.id+'/original');if(sequence!==this.sequence)return;
  const bytes=Uint8Array.from(atob(data.audio),c=>c.charCodeAt(0));
- this.take={samples:new Float32Array(bytes.buffer),rate:data.sampleRate,id:row.id};
+ this.take={samples:new Float32Array(bytes.buffer),rate:data.sampleRate,id:row.id,identity:data.identity};
  $('editTitle').textContent=title;$('review').hidden=false;$('reviewControls').disabled=false;
- $('reviewDescription').textContent='Original: '+(this.take.samples.length/this.take.rate).toFixed(3)+' seconds · '+this.take.rate+' Hz';
- this.setTrim(data.startFrame,data.endFrame);$('review').scrollIntoView({block:'start'});this.notify('Edit the selection, preview, then save trim.');
+ this.describeTake();
+ this.setTrim(data.startFrame,data.endFrame);
+ if(window.matchMedia('(max-width: 850px)').matches)$('review').scrollIntoView({block:'nearest'});
+ this.notify('Edit the selection, preview, then save trim.');
  }
- close(){++this.sequence;this.audio.stop();this.take=null;$('review').hidden=true;}
+ close(){++this.sequence;this.audio.stop();this.take=null;this.sampleId=null;$('review').hidden=true;}
  async save(){if(!this.take)return;await this.guard(async()=>{
- this.selection();$('reviewControls').disabled=true;
- try{await this.api('/api/samples/'+this.take.id+'/trim',{startFrame:this.trim.startFrame,endFrame:this.trim.endFrame});await this.saved();this.notify('Trim saved. Playback and ZIP export use this selection. The original remains available.');}
- finally{$('reviewControls').disabled=false;}
+ const selected=this.selection();$('reviewControls').disabled=true;
+ const sequence=this.sequence;
+ try{
+  const result=await this.api('/api/samples/'+this.take.id+'/trim',{startFrame:this.trim.startFrame,endFrame:this.trim.endFrame,expectedIdentity:this.take.identity});
+  if(sequence===this.sequence){
+   this.take.samples=selected.samples;
+   this.take.identity=result.identity;
+   this.describeTake();
+   this.setTrim(0,selected.samples.length);
+  }
+  await this.saved();
+  this.notify('Trim saved. The selected audio replaced the stored take.');
+ }
+ finally{if(sequence===this.sequence)$('reviewControls').disabled=false;}
  });}
+ describeTake(){
+  const {samples,rate}=this.take;
+  $('reviewDescription').textContent='Stored take · '+(samples.length/rate).toFixed(3)+' seconds · '+rate+' Hz';
+ }
   resetTrim(){
     if(!this.take)return;
     this.setTrim(0,this.take.samples.length);

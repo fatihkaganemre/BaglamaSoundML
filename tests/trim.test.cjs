@@ -17,21 +17,27 @@ test('trimming uses exact frames, rejects invalid bounds, and preserves the orig
  assert.equal(trimBounds(44100,44100,0,8820).duration,.2);
  assert.throws(()=>trimBounds(44100,44100,0,8819));
 });
-test('review saves selected PCM, retains failed drafts, and resets to the complete take',async()=>{
+test('review retains failed drafts and displays only the saved trim after saving',async()=>{
  const elements=new Map();
  const context=new Proxy({}, {get:(o,k)=>o[k]||(()=>{})});
  global.document={addEventListener(){},getElementById(id){if(!elements.has(id))elements.set(id,{value:'',checked:false,disabled:false,hidden:true,width:800,height:150,addEventListener(){},setAttribute(){},classList:{toggle(){}},getContext(){return context;}});return elements.get(id);}};
  global.window={addEventListener(){}};
  const {SampleEditor}=await import(captureURL);
  let payload,fail=true;
- const ui=new SampleEditor({audio:{stop(){}},api:async(_,body)=>{payload=body;if(fail)throw Error('offline');return {};},label(){},notify(){},saved:async()=>{}});
+ const ui=new SampleEditor({audio:{stop(){}},api:async(_,body)=>{payload=body;if(fail)throw Error('offline');return {identity:'trimmed-audio'};},label(){},notify(){},saved:async()=>{}});
  const original=Float32Array.from({length:48001},(_,i)=>Math.sin(i*.1));
- ui.take={samples:original,rate:48000,setup:{label:'test',session:'test',strength:'medium'},source:'microphone',filename:''};
+ ui.take={samples:original,rate:48000,id:'test',identity:'stored-audio'};
  ui.setTrim(9600,28800);document.getElementById('realAttestation').checked=true;
  await ui.save();
  assert.equal(ui.take.samples,original);assert.equal(ui.trim.startFrame,9600);assert.equal(document.getElementById('reviewControls').disabled,false);
- assert.deepEqual(payload,{startFrame:9600,endFrame:28800});
+ assert.deepEqual(payload,{startFrame:9600,endFrame:28800,expectedIdentity:'stored-audio'});
  ui.resetTrim();assert.equal(ui.selection().samples.length,48001);
  ui.setTrim(0,10);assert.throws(()=>ui.selection());assert.equal(document.getElementById('saveTake').disabled,true);
- ui.setTrim(9600,28800);fail=false;await ui.save();assert.equal(ui.take.samples,original);
+ ui.setTrim(9600,28800);fail=false;await ui.save();
+ assert.deepEqual(ui.take.samples,original.slice(9600,28800));
+ assert.equal(ui.take.identity,'trimmed-audio');
+ assert.equal(ui.trim.startFrame,0);
+ assert.equal(ui.trim.endFrame,19200);
+ assert.match(document.getElementById('reviewDescription').textContent,/0\.400 seconds/);
+ ui.resetTrim();assert.equal(ui.selection().samples.length,19200);
 });

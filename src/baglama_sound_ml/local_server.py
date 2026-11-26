@@ -174,9 +174,12 @@ def make_handler(app: LabApplication):
                 if path=='/api/export/feedback':
                     return self.response(200,json.dumps(app.feedback.report(),indent=2).encode(),'application/json; charset=utf-8','BaglamaSoundML-feedback.json')
                 if len(parts)==4 and parts[:2]==['api','samples'] and parts[3]=='original':
-                    audio,rate=app.library.real_audio(parts[2],original=True)
-                    row=next(r for r in app.samples() if r['id']==parts[2])
-                    return self.response(200,dict(audio=base64.b64encode(audio.astype('<f4').tobytes()).decode(),sampleRate=rate,startFrame=row['startFrame'],endFrame=row['endFrame']))
+                    audio,row=app.library.sample_audio(parts[2],original=True)
+                    if row['deleted_at']:
+                        raise KeyError('Sample is in Trash.')
+                    return self.response(200,dict(audio=base64.b64encode(audio.astype('<f4').tobytes()).decode(),
+                                                  sampleRate=row['rate'],identity=row['identity'],
+                                                  startFrame=row['start_frame'] or 0,endFrame=row['end_frame'] or len(audio)))
                 if len(parts)==4 and parts[:2] in (['api','samples'],['api','renders']) and parts[3]=='audio':
                     kind,identity=parts[1],parts[2]
                     if kind=='samples':
@@ -218,7 +221,8 @@ def make_handler(app: LabApplication):
                 if path=='/api/recordings':
                     return self.response(400,dict(error='Import new samples as a Baglamator ZIP.'))
                 if len(parts)==4 and parts[:2]==['api','samples'] and parts[3]=='trim':
-                    return self.response(200,app.library.trim(parts[2],body.get('startFrame'),body.get('endFrame')))
+                    return self.response(200,app.library.trim(parts[2],body.get('startFrame'),body.get('endFrame'),
+                                                              body.get('expectedIdentity')))
                 if path=='/api/final-tone-tests':
                     raw=base64.b64decode(body.get('audio',''),validate=True)
                     if len(raw)%4 or len(raw)>192000*4*8:raise ValueError('Invalid strum PCM.')

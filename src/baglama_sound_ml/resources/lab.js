@@ -77,9 +77,10 @@ function renderLibrary() {
     const open = isOpen(key);
     return `<details class="${nested ? 'string-group' : 'sample-group'}" data-sample-group="${esc(key)}" data-rendered-open="${open ? '1' : '0'}" data-total-count="${count}"${open ? ' open' : ''}>
       <summary><span>${esc(title)}</span><span class="badge">${count} ${count === 1 ? 'sample' : 'samples'}</span></summary>
-      <div class="${nested ? 'group-takes' : 'string-groups'}">${contents}</div></details>`;
+      <div class="${nested ? 'group-takes' : 'string-groups'}">${nested ? `<div class="take-list">${contents}</div>` : contents}</div></details>`;
   };
   $('librarySummary').textContent = `${rows.length} matching samples · ${groups.length} final-tone groups. Open a group, then a physical string, to see its takes.`;
+  $('reviewHome').append($('review'));
   $('sampleList').innerHTML = groups.map(group => {
     const strings = [...group.strings.values()].sort((a, b) =>
       (a.rows[0].label.physicalStringNumber ?? Infinity) - (b.rows[0].label.physicalStringNumber ?? Infinity));
@@ -91,6 +92,12 @@ function renderLibrary() {
     }).join('');
     return disclosure(group.key, setupTitle(group.label), group.rows.length, contents);
   }).join('') || '<div class="card">No samples match this view. Import a Baglamator ZIP.</div>';
+  if(editor?.sampleId){
+    const button=$('sampleList').querySelector(`button[data-action="sample-edit"][data-id="${CSS.escape(editor.sampleId)}"]`);
+    const takes=button?.closest('.group-takes');
+    if(takes?.closest('.string-group').open && takes.closest('.sample-group').open) takes.append($('review'));
+    else editor.close();
+  }
   $('expandSamples').disabled = groups.length === 0;
   $('collapseSamples').disabled = groups.length === 0;
 }
@@ -125,7 +132,10 @@ async function init(){
     if (group.dataset.renderedOpen === open) return;
     group.dataset.renderedOpen = open;
     if (group.open) state.openSampleGroups.add(group.dataset.sampleGroup);
-    else state.openSampleGroups.delete(group.dataset.sampleGroup);
+    else {
+      state.openSampleGroups.delete(group.dataset.sampleGroup);
+      if(group.contains($('review')))editor.close();
+    }
   }, true);
   $('sampleList').addEventListener('click', event => {
     const button = event.target.closest('button[data-more-takes]');
@@ -148,7 +158,7 @@ async function init(){
     renderLibrary();
   };
  $('importZip').onclick=()=>$('zipFile').click();$('zipFile').onchange=event=>guarded(async()=>{const file=event.target.files[0];event.target.value='';if(!file)return;if(file.size>40*1024*1024)throw Error('Import one ZIP smaller than 40 MB at a time.');$('importZip').disabled=true;try{notify('Importing original captures locally…');const result=await api('/api/import',{filename:file.name,archive:base64(new Uint8Array(await file.arrayBuffer()))});await refreshSamples();notify('Imported '+result.added+' recordings; '+result.duplicates+' duplicates skipped.');}finally{$('importZip').disabled=false;}});
- document.addEventListener('click',event=>{const button=event.target.closest('button[data-action]');if(!button)return;guarded(async()=>{const action=button.dataset.action,id=button.dataset.id;button.disabled=true;try{if(action==='sample-edit'){await editor.open(state.samples.find(r=>r.id===id),sampleTitle(state.samples.find(r=>r.id===id)));}else if(action==='sample-play'){const row=state.samples.find(r=>r.id===id);await audio.playURL('/api/samples/'+id+'/audio',sampleTitle(row));}else if(action==='sample-trash'||action==='sample-restore'){editor.close();audio.stop();await api('/api/samples/'+id+'/'+(action==='sample-trash'?'trash':'restore'),{});await refreshSamples();notify(action==='sample-trash'?'Moved to Trash. Restore it using the View filter.':'Restored.');}else if(action==='render-play'){const row=state.renders.find(r=>r.id===id);await audio.playURL('/api/renders/'+id+'/audio',row?renderTitle(row):'Generated sound');}else if(action==='render-rate'){const row=state.renders.find(r=>r.id===id);await view('playground');selectPlaygroundTool('generate');showCandidate(row,state.feedback.ratings.find(r=>r.render_id===id));await audio.playURL('/api/renders/'+id+'/audio',renderTitle(row),$('renderWave'));}else if(action==='render-restore'){await api('/api/renders/'+id+'/restore',{});await refreshFeedback();notify('Generated candidate restored.');}else if(action==='render-trash'){audio.stop();await api('/api/renders/'+id+'/trash',{});await refreshFeedback();notify('Generated candidate hidden. Existing feedback remains saved.');}}finally{button.disabled=false;}});});
+ document.addEventListener('click',event=>{const button=event.target.closest('button[data-action]');if(!button)return;guarded(async()=>{const action=button.dataset.action,id=button.dataset.id;button.disabled=true;try{if(action==='sample-edit'){button.closest('.group-takes').append($('review'));await editor.open(state.samples.find(r=>r.id===id),sampleTitle(state.samples.find(r=>r.id===id)));}else if(action==='sample-play'){const row=state.samples.find(r=>r.id===id);await audio.playURL('/api/samples/'+id+'/audio',sampleTitle(row));}else if(action==='sample-trash'||action==='sample-restore'){editor.close();audio.stop();await api('/api/samples/'+id+'/'+(action==='sample-trash'?'trash':'restore'),{});await refreshSamples();notify(action==='sample-trash'?'Moved to Trash. Restore it using the View filter.':'Restored.');}else if(action==='render-play'){const row=state.renders.find(r=>r.id===id);await audio.playURL('/api/renders/'+id+'/audio',row?renderTitle(row):'Generated sound');}else if(action==='render-rate'){const row=state.renders.find(r=>r.id===id);await view('playground');selectPlaygroundTool('generate');showCandidate(row,state.feedback.ratings.find(r=>r.render_id===id));await audio.playURL('/api/renders/'+id+'/audio',renderTitle(row),$('renderWave'));}else if(action==='render-restore'){await api('/api/renders/'+id+'/restore',{});await refreshFeedback();notify('Generated candidate restored.');}else if(action==='render-trash'){audio.stop();await api('/api/renders/'+id+'/trash',{});await refreshFeedback();notify('Generated candidate hidden. Existing feedback remains saved.');}}finally{button.disabled=false;}});});
  $('generateForm').onsubmit=generate;$('replayRender').onclick=()=>guarded(()=>audio.playURL('/api/renders/'+state.current.id+'/audio',renderTitle(state.current),$('renderWave')));
  document.querySelectorAll('[data-preset]').forEach(button=>button.onclick=()=>{const[note,octave,course]=button.dataset.preset.split(',');$('genNote').value=note;$('genOctave').value=octave;$('genCourse').value=course;});
  $('ratingForm').onsubmit=event=>{event.preventDefault();guarded(async()=>{const button=$('ratingForm').querySelector('button[type=submit]');button.disabled=true;try{await api('/api/renders/'+state.current.id+'/feedback',{naturalness:Number($('naturalness').value),attack:Number($('attack').value),decay:Number($('decay').value),pitchImpression:$('pitchImpression').value,tags:[...document.querySelectorAll('#feedbackTags input:checked')].map(i=>i.value),note:$('ratingNote').value,favorite:$('favorite').checked});await refreshFeedback();notify('Feedback saved for this exact sound. The model and real-recording dataset have not changed.');}finally{button.disabled=false;}});};

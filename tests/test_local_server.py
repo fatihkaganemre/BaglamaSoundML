@@ -53,12 +53,36 @@ class LocalServerTests(unittest.TestCase):
         with self.post('/api/import',dict(filename='test.zip',archive=base64.b64encode(pack.getvalue()).decode())) as response:
             self.assertEqual(json.load(response)['added'],1)
         sample=self.app.samples()[0]
-        with self.post('/api/samples/'+sample['id']+'/trim',dict(startFrame=4800,endFrame=24000)):pass
+        with self.app.library.connect() as db:
+            db.execute('INSERT INTO sample_edits VALUES (?,?,?,?)',
+                       (sample['id'],4800,24000,json.dumps(sample['analysis'])))
+        editor_url=self.url+'/api/samples/'+sample['id']+'/original'
+        with urlopen(editor_url) as response:
+            before=json.load(response)
+        self.assertEqual((before['startFrame'],before['endFrame']),(4800,24000))
+        with self.post('/api/samples/'+sample['id']+'/trim',dict(startFrame=4800,endFrame=24000,
+                                                              expectedIdentity=before['identity'])) as response:
+            saved=json.load(response)
+            self.assertTrue(saved['saved'])
+            self.assertEqual((saved['startFrame'],saved['endFrame']),(0,19200))
         self.assertEqual(self.app.samples()[0]['frames'],19200)
         np.testing.assert_array_equal(self.app.library.real_audio(sample['id'])[0],audio[4800:24000])
-        np.testing.assert_array_equal(self.app.library.real_audio(sample['id'],original=True)[0],audio)
-        with self.post('/api/samples/'+sample['id']+'/trim',dict(startFrame=0,endFrame=48000)):pass
-        self.assertEqual(self.app.samples()[0]['frames'],48000)
+        self.assertFalse((self.project/'library'/'originals'/f'{sample["id"]}.f32').exists())
+        with urlopen(editor_url) as response:
+            after=json.load(response)
+        self.assertEqual((after['startFrame'],after['endFrame']),(0,19200))
+        self.assertNotEqual(after['identity'],before['identity'])
+        self.assertEqual(saved['identity'],after['identity'])
+        self.assertEqual(base64.b64decode(after['audio']),audio[4800:24000].tobytes())
+        with self.post('/api/import',dict(filename='test.zip',archive=base64.b64encode(pack.getvalue()).decode())) as response:
+            self.assertEqual(json.load(response),dict(added=0,duplicates=1))
+        with self.assertRaises(HTTPError) as stale:
+            self.post('/api/samples/'+sample['id']+'/trim',dict(startFrame=0,endFrame=12000,
+                                                              expectedIdentity=before['identity']))
+        self.assertEqual(stale.exception.code,400)
+        with self.assertRaises(HTTPError) as outside:
+            self.post('/api/samples/'+sample['id']+'/trim',dict(startFrame=0,endFrame=48000))
+        self.assertEqual(outside.exception.code,400)
         with urlopen(self.url+'/api/samples/'+sample['id']+'/audio') as response:
             wav=response.read()
             self.assertEqual(wav[:4],b'RIFF')
@@ -75,6 +99,7 @@ class LocalServerTests(unittest.TestCase):
             with zipfile.ZipFile(io.BytesIO(response.read())) as archive:
                 self.assertEqual(len(archive.namelist()),2)
                 self.assertNotIn(generated['id'],' '.join(archive.namelist()))
+                self.assertEqual(archive.read(f'Samples/{sample["id"]}.f32'),audio[4800:24000].tobytes())
 
     def test_project_specific_stop_command_shuts_down_only_its_server(self):
         from baglama_sound_ml.local_server import stop_server
